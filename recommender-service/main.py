@@ -28,4 +28,4 @@ async def startup_event():
 
 @app.get("/customers")
 def get_customer_segmentation():
-    return { "data": customer_segmenter.result}
+    return { "data": customer_segmenter.get_customer_RFM()}
