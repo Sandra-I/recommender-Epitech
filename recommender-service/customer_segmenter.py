@@ -1,18 +1,19 @@
 import pandas as pd
+from get_file_from_url import GetFileFromUrl
 
 class CustomerSegmenter:
 
+    get_file_from_url = GetFileFromUrl()
     customer_cluster_result = 0
     df = pd.DataFrame()
     customer_rfm = {}
     customer_family = {}
 
     def __init__(self):
-        self.df = pd.read_csv('..\clean_dataset.csv', parse_dates=True)
-        self.df.head()
+        self.df = self.get_file_from_url.get_clean_dataframe()
+        print(self.df.head())
 
     def create_customer_clusters(self):
-        
         rfm_df = self.get_RFM()
         self.customer_rfm = rfm_df.to_json(orient="index")
 
