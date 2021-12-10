@@ -1,7 +1,7 @@
 clean_dataset.csv
 RFM_data.csv
 RFM.csv
-
+KaDo.csv
    
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -154,3 +154,7 @@ API
 Training
 Blog
 About
+
+# workspace
+/workspace.xml
+.idea/
