@@ -1,7 +1,6 @@
 clean_dataset.csv
 RFM_data.csv
 RFM.csv
-data.csv
 KaDo.csv
 
 # Byte-compiled / optimized / DLL files
@@ -155,3 +154,7 @@ API
 Training
 Blog
 About
+
+# workspace
+/workspace.xml
+.idea/
