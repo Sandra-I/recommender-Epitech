@@ -1,6 +1,8 @@
 # recommender_2021_31
 
-###API
+### API
+
+
 pour lancer le serveur fastapi, depuis le dossier recommender-service/ :
 
 `uvicorn main:app --reload`
