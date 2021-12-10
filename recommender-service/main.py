@@ -41,3 +41,7 @@ def get_counts_by_category(cat):
 @app.get("/counts_by_customer/{cat}")
 def get_counts_by_category(cat):
     return { "data": customer_segmenter.get_counts_category_by_customer(cat)}
+
+@app.get("/average_basket")
+def get_customer_segmentation():
+    return { "data": customer_segmenter.get_customer_RFM()}

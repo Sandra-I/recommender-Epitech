@@ -11,6 +11,7 @@ class CustomerSegmenter:
     data_by_cat = {}
     counts_by_cat = {}
     counts_cat_by_cust = {}
+    average_basket = {}
 
     def __init__(self):
         self.df = self.get_file_from_url.get_clean_dataframe()
@@ -59,3 +60,16 @@ class CustomerSegmenter:
         counts = self.df.groupby("CLI_ID")[cat].value_counts()
         self.counts_cat_by_cust = counts.to_json(orient="index")
         return self.counts_cat_by_cust
+    
+    def division_for_average_basket(x, y):
+        return y['monetary'] / y['frequency']
+
+    def calculate_average_basket(self):
+        data = { 'monetary': self.calculate_monetary(), 'frequency': self.calculate_frequency() }
+        data_frame = pd.DataFrame(data=data, index=data['frequency'].index)
+        average = data_frame.apply(self.division_for_average_basket, axis=1)
+        self.average_basket = average.to_json(orient="index")
+    
+    def get_average_basket(self):
+        self.calculate_average_basket()
+        return self.average_basket
