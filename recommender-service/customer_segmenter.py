@@ -7,8 +7,9 @@ class CustomerSegmenter:
     df = pd.DataFrame()
     customer_rfm = {}
     customer_family = {}
-    data_by_category = {}
-    counts_by_category = {}
+    data_by_cat = {}
+    counts_by_cat = {}
+    counts_cat_by_cust = {}
 
     def __init__(self):
         self.df = pd.read_csv('../data.csv', parse_dates=True)
@@ -41,14 +42,20 @@ class CustomerSegmenter:
     def calculate_frequency(self):
         return self.df[['CLI_ID', 'TICKET_ID']].groupby('CLI_ID').agg(pd.Series.nunique).squeeze()
 
-    def get_customers_data_by_category(self, cat):
+    def get_customers_by_category(self, cat):
         cat = cat.upper()
-        category_data_df = self.df[["CLI_ID", cat]]
-        self.data_by_category = category_data_df.to_json(orient="index")
-        return self.data_by_category
+        cat_data_df = self.df[["CLI_ID", cat]]
+        self.data_by_cat = cat_data_df.to_json(orient="index")
+        return self.data_by_cat
 
     def get_counts_by_category(self, cat):
         cat = cat.upper()
         counts = self.df[cat].value_counts(dropna=False)
-        self.counts_by_category = counts.to_json(orient="index")
-        return self.counts_by_category
+        self.counts_by_cat = counts.to_json(orient="index")
+        return self.counts_by_cat
+
+    def get_counts_category_by_customer(self, cat):
+        cat = cat.upper()
+        counts = self.df.groupby("CLI_ID")[cat].value_counts()
+        self.counts_cat_by_cust = counts.to_json(orient="index")
+        return self.counts_cat_by_cust

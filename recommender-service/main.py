@@ -32,8 +32,12 @@ def get_customer_segmentation():
 
 @app.get("/{cat}")
 def get_customers_data_by_category(cat):
-    return { "data": customer_segmenter.get_customers_data_by_category(cat)}
+    return { "data": customer_segmenter.get_customers_by_category(cat)}
 
 @app.get("/counts/{cat}")
 def get_counts_by_category(cat):
     return { "data": customer_segmenter.get_counts_by_category(cat)}
+
+@app.get("/counts_by_customer/{cat}")
+def get_counts_by_category(cat):
+    return { "data": customer_segmenter.get_counts_category_by_customer(cat)}
