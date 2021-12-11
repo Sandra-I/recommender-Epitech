@@ -1,66 +1,44 @@
 import pandas as pd
 from itertools import permutations
 from sklearn.metrics.pairwise import cosine_similarity
-
+from get_file_from_url import GetFileFromUrl
+import numpy as np 
 class ItemRecommender:
     
     df = pd.DataFrame()
-    small_df = pd.DataFrame()
     df_best_item_by_cli = pd.DataFrame()
     df_unique_item = pd.DataFrame()
     pair_counts_df_sorted = pd.DataFrame()
-    user_cosine_similarity_df = pd.DataFrame()
+    rfm_cli_article_df = pd.DataFrame()
     df_reset_freq = pd.DataFrame()
+    get_file_from_url = GetFileFromUrl()
 
     most_buyed_articles = {}
     most_buyed_articles_among_users = {}
     unpersonnalized_recommended_items = []
 
     def __init__(self):
-        self.df = pd.read_csv("../clean_dataset.csv", parse_dates=True)
-        self.small_df = self.df
-        self.df.head()
+        self.df = pd.read_csv("../KaDo_clean.csv", parse_dates=True)#self.get_file_from_url.get_clean_dataframe()
+        #Décommenter quand les fichiers seront sur AWS
+        #self.df_best_item_by_cli = self.get_file_from_url.get_best_item_by_cli_dataframe()
+        #self.pair_counts_df_sorted = self.get_file_from_url.get_paired_item_dataframe()
+        #self.df_reset_freq = self.get_file_from_url.get_frequence_item_dataframe()
+        #self.df_reset_freq = self.get_file_from_url.get_rfm_cli_article_dataframe()
 
-    def create_customer_preferences_df(self):
-        self.small_df["Most_Buyed_Article"] = self.small_df.groupby("CLI_ID")['LIBELLE'].transform(lambda x: x.value_counts().idxmax())
-        self.df_best_item_by_cli =pd.DataFrame({'Count' : self.small_df.groupby(["CLI_ID"])["Most_Buyed_Article"].value_counts()})
-        self.df_best_item_by_cli = self.df_best_item_by_cli.reset_index()
-        self.df_best_item_by_cli = self.df_best_item_by_cli[["CLI_ID", "Most_Buyed_Article"]]
+        #Supprimer quand les fichiers seront sur AWS
+        self.df_best_item_by_cli = pd.read_csv("../best_item_by_cli.csv", parse_dates=True)
+        self.pair_counts_df_sorted = pd.read_csv("../paired_item.csv", parse_dates=True)
+        self.df_reset_freq = pd.read_csv("../frequence_item.csv", parse_dates=True)
+        self.rfm_cli_article_df = pd.read_csv("../cli_article_rfm_segment.csv", parse_dates=True)
+
+
+        self.df.head()
     
     def create_unique_item_df(self):
-        self.df_unique_item = self.small_df.drop_duplicates(subset=["LIBELLE"], keep='first')
-
-    def create_pairs_df(self):
-        def create_pairs(x):
-            pairs = pd.DataFrame(list(permutations(x.values,2)), columns=["item_a", "item_b"])
-            return pairs    
-        df_pairs = self.df_unique_item.groupby("CLI_ID")["LIBELLE"].apply(create_pairs)
-        df_pairs = df_pairs.reset_index(drop=True)
-        pair_counts = df_pairs.groupby(["item_a",'item_b']).size()
-        pair_counts_df = pair_counts.to_frame(name = "size").reset_index()
-        self.pair_counts_df_sorted = pair_counts_df.sort_values('size', ascending=False)
-        self.pair_counts_df_sorted.to_csv('PairedItem.csv', index=False)
-    
-    def create_frequence_df(self):
-        def frequence_item(x):
-            total_achat = x["TICKET_ID"].count()
-            freq = x["LIBELLE"].value_counts() / total_achat 
-            return freq
-
-        df_freq = self.small_df.groupby("CLI_ID").apply(frequence_item)
-        df_freq = df_freq.reset_index()
-        df_freq = df_freq.set_index("CLI_ID")
-        df_freq = df_freq.rename(columns={"level_1": "Item", "LIBELLE": "Frequence"})
-        self.df_reset_freq = df_freq.reset_index()
-        user_item_frequence_pivot = df_freq.pivot_table(index="CLI_ID",columns="Item", values="Frequence")
-        avg_user_item_freq = user_item_frequence_pivot.mean(axis=1)
-        user_item_frequence_pivot = user_item_frequence_pivot.sub(avg_user_item_freq, axis=0)
-        user_item_frequence_pivot = user_item_frequence_pivot.fillna(0)
-        user_similarities = cosine_similarity(user_item_frequence_pivot)
-        self.user_cosine_similarity_df = pd.DataFrame(user_similarities, index=user_item_frequence_pivot.index,columns=user_item_frequence_pivot.index)
+        self.df_unique_item = self.df.drop_duplicates(subset=["LIBELLE"], keep='first')
 
     def get_most_buyed_articles(self, limitValue):
-        most_buyed_articles_df = self.small_df["LIBELLE"].value_counts().head(3)
+        most_buyed_articles_df = self.df["LIBELLE"].value_counts().head(3)
         self.most_buyed_articles = most_buyed_articles_df.to_json(orient="index")
         return self.most_buyed_articles
 
@@ -77,12 +55,12 @@ class ItemRecommender:
 
     def get_often_buy_together_articles(self, customerId):
         customer_best_article = self.get_user_most_buyed_articles(customerId)
-        customer_best_article_libelle = customer_best_article["Most_Buyed_Article"].values[0]
+        customer_best_article_libelle = customer_best_article["LIBELLE"].values[0]
         paired_article = self.pair_counts_df_sorted[self.pair_counts_df_sorted["item_a"] == customer_best_article_libelle][:3]["item_b"].tolist()
         return paired_article
 
     def get_user_most_buyed_articles(self, customerId):
-        return self.small_df[self.small_df["LIBELLE"] == self.df_best_item_by_cli[self.df_best_item_by_cli["CLI_ID"] == customerId]["Most_Buyed_Article"].values[0]][:1]
+        return self.df[self.df["LIBELLE"] == self.df_best_item_by_cli[self.df_best_item_by_cli["CLI_ID"] == int(customerId)]["Most_Buyed_Article"].values[0]][:1]
 
     def get_closest_product_by_customer(self, customerId):
 
@@ -104,25 +82,21 @@ class ItemRecommender:
         return closest_product
 
     def get_article_from_similar_client(self, customerId):
-        user_cosine_similarity_series = self.user_cosine_similarity_df.loc[customerId]
-        user_ordered_similarities = user_cosine_similarity_series.sort_values(ascending=False)
-        similar_customer_id = user_ordered_similarities[:2].index[1]
-        similar_user_product=  self.get_user_most_buyed_articles(similar_customer_id)
-        if (similar_user_product["LIBELLE"].values[0] == self.get_user_most_buyed_articles(similar_customer_id)["LIBELLE"].values[0]):
-            similar_user_product = self.df_reset_freq[self.df_reset_freq["CLI_ID"] == similar_customer_id][:2].values[1][1]
-            return similar_user_product
-        return similar_user_product["LIBELLE"].values[0]
-
+        user = self.rfm_cli_article_df[self.rfm_cli_article_df["CLI_ID"] == int(customerId)]
+        print(user)
+        similar_users = self.rfm_cli_article_df[(self.rfm_cli_article_df["RFM_SEGMENT"] == user["RFM_SEGMENT"].values[0]) & (self.rfm_cli_article_df["Most_Buyed_Article"] == user["Most_Buyed_Article"].values[0])][:3]
+        closest_product = []
+        for i in range(1,3):
+            product_index = self.df_reset_freq[self.df_reset_freq["CLI_ID"] == similar_users.iloc[[i]]["CLI_ID"].values[0]]["Frequence"].nlargest(3).index.values[1]
+            closest_product.append(self.df_reset_freq.loc[[product_index]]["Item"].values[0])
+        return closest_product
     
     def get_personnalized_recommendation_for_a_user(self, customerId):
-        zeub = {}
+        data = {}
         of = self.get_often_buy_together_articles(customerId)
-        zeub["Acheté fréquemment ensemble :"] = of
-        
-      
+        data["Acheté fréquemment ensemble :"] = of
         cl = self.get_closest_product_by_customer(customerId)
-        zeub["Produits similaires :"] = cl
+        data["Produits similaires :"] = cl
         sm = self.get_article_from_similar_client(customerId)
-        zeub["des utilisateurs similaires ont également acheté :"] = sm
-        
-        return zeub
+        data["des utilisateurs similaires ont également acheté :"] = sm
+        return data

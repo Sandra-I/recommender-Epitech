@@ -27,10 +27,7 @@ item_recommender = ItemRecommender()
 @app.on_event("startup")
 async def startup_event():
     customer_segmenter.create_customer_clusters()
-    #item_recommender.create_customer_preferences_df()
-    #item_recommender.create_unique_item_df()
-    #item_recommender.create_pairs_df()
-    #item_recommender.create_frequence_df()
+    item_recommender.create_unique_item_df()
 
 @app.get("/customers")
 def get_customer_segmentation():
@@ -40,21 +37,21 @@ def get_customer_segmentation():
 def get_most_buyed_articles():
     return { "data": item_recommender.get_unpersonalized_recommendation(10)}
 
-@app.get("/pairedArticles")
-def get_paired_articles():
-    return {"data": item_recommender.get_often_buy_together_articles(1490281)}
+@app.get("/pairedArticles/{id}")
+def get_paired_articles(id):
+    return {"data": item_recommender.get_often_buy_together_articles(id)}
 
-@app.get("/closestArticle")
-def get_closest_article():
-    return {"data": item_recommender.get_closest_product_by_customer(1490281)}
+@app.get("/closestArticle/{id}")
+def get_closest_article(id):
+    return {"data": item_recommender.get_closest_product_by_customer(id)}
 
-@app.get("/neighborMostBuyedArticle")
-def get_article_from_closest_customer():
-    return {"data": item_recommender.get_article_from_similar_client(1490281)}
+@app.get("/neighborMostBuyedArticle/{id}")
+def get_article_from_closest_customer(id):
+    return {"data": item_recommender.get_article_from_similar_client(id)}
 
-@app.get("/all")
-def get_all():
-    return {"data": item_recommender.get_personnalized_recommendation_for_a_user(1490281)}
+@app.get("/all/{id}")
+def get_all(id):
+    return {"data": item_recommender.get_personnalized_recommendation_for_a_user(id)}
 
 @app.get("/{cat}")
 def get_customers_data_by_category(cat):
