@@ -1,18 +1,22 @@
 import pandas as pd
+from get_file_from_url import GetFileFromUrl
 
 class CustomerSegmenter:
 
+    get_file_from_url = GetFileFromUrl()
     customer_cluster_result = 0
     df = pd.DataFrame()
     customer_rfm = {}
     customer_family = {}
+    data_by_cat = {}
+    counts_by_cat = {}
+    counts_cat_by_cust = {}
 
     def __init__(self):
-        self.df = pd.read_csv('..\clean_dataset.csv', parse_dates=True)
-        self.df.head()
+        self.df = self.get_file_from_url.get_clean_dataframe()
+        print(self.df.head())
 
     def create_customer_clusters(self):
-        
         rfm_df = self.get_RFM()
         self.customer_rfm = rfm_df.to_json(orient="index")
 
@@ -37,3 +41,21 @@ class CustomerSegmenter:
 
     def calculate_frequency(self):
         return self.df[['CLI_ID', 'TICKET_ID']].groupby('CLI_ID').agg(pd.Series.nunique).squeeze()
+
+    def get_customers_by_category(self, cat):
+        cat = cat.upper()
+        cat_data_df = self.df[["CLI_ID", cat]]
+        self.data_by_cat = cat_data_df.to_json(orient="index")
+        return self.data_by_cat
+
+    def get_counts_by_category(self, cat):
+        cat = cat.upper()
+        counts = self.df[cat].value_counts(dropna=False)
+        self.counts_by_cat = counts.to_json(orient="index")
+        return self.counts_by_cat
+
+    def get_counts_category_by_customer(self, cat):
+        cat = cat.upper()
+        counts = self.df.groupby("CLI_ID")[cat].value_counts()
+        self.counts_cat_by_cust = counts.to_json(orient="index")
+        return self.counts_cat_by_cust

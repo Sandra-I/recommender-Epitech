@@ -26,10 +26,10 @@ item_recommender = ItemRecommender()
 
 @app.on_event("startup")
 async def startup_event():
-    #customer_segmenter.create_customer_clusters()
+    customer_segmenter.create_customer_clusters()
     #item_recommender.create_customer_preferences_df()
-    item_recommender.create_unique_item_df()
-    item_recommender.create_pairs_df()
+    #item_recommender.create_unique_item_df()
+    #item_recommender.create_pairs_df()
     #item_recommender.create_frequence_df()
 
 @app.get("/customers")
@@ -55,3 +55,15 @@ def get_article_from_closest_customer():
 @app.get("/all")
 def get_all():
     return {"data": item_recommender.get_personnalized_recommendation_for_a_user(1490281)}
+
+@app.get("/{cat}")
+def get_customers_data_by_category(cat):
+    return { "data": customer_segmenter.get_customers_by_category(cat)}
+
+@app.get("/counts/{cat}")
+def get_counts_by_category(cat):
+    return { "data": customer_segmenter.get_counts_by_category(cat)}
+
+@app.get("/counts_by_customer/{cat}")
+def get_counts_by_category(cat):
+    return { "data": customer_segmenter.get_counts_category_by_customer(cat)}
