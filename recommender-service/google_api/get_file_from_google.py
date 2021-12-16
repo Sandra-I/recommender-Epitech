@@ -37,9 +37,7 @@ for file_id, file_name in zip(file_ids, file_names):
     clean_dataset = fh
     df = pd.read_csv(clean_dataset, parse_dates=True)
     print(df.head())
-    # with open(os.path.join('./datasets', file_name), 'wb') as f:
-    #     f.write(fh.read())
-    #     f.close
+
 
 
 # class GetFileFromGoogleDrive:
