@@ -1,3 +1,0 @@
-# print('Hello World!')
-import subprocess
-subprocess.run(["wget -q --show-progress --load-cookies /tmp/cookies.txt \"https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=1YzBXfLqRCm5yAs48mgmPIemhlUaV0jNJ' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1YzBXfLqRCm5yAs48mgmPIemhlUaV0jNJ\" -O test.csv && rm -rf /tmp/cookies.txt0"])
