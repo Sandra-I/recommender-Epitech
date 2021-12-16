@@ -1,8 +1,9 @@
 import pandas as pd
 from itertools import permutations
 from sklearn.metrics.pairwise import cosine_similarity
-from get_file_from_url import GetFileFromUrl
+# from get_file_from_url import GetFileFromUrl
 import numpy as np 
+from google_api.get_file_from_google import GetFileFromGoogleDrive
 class ItemRecommender:
     
     df = pd.DataFrame()
@@ -11,25 +12,31 @@ class ItemRecommender:
     pair_counts_df_sorted = pd.DataFrame()
     rfm_cli_article_df = pd.DataFrame()
     df_reset_freq = pd.DataFrame()
-    get_file_from_url = GetFileFromUrl()
+    # get_file_from_url = GetFileFromUrl()
+    get_file_from_google = GetFileFromGoogleDrive()
 
     most_buyed_articles = {}
     most_buyed_articles_among_users = {}
     unpersonnalized_recommended_items = []
 
     def __init__(self):
-        self.df = pd.read_csv("../KaDo_clean.csv", parse_dates=True)#self.get_file_from_url.get_clean_dataframe()
+        
+        #self.get_file_from_url.get_clean_dataframe()
+
+        self.df = self.get_file_from_google.get_clean_dataframe()
+        
         #Décommenter quand les fichiers seront sur AWS
-        #self.df_best_item_by_cli = self.get_file_from_url.get_best_item_by_cli_dataframe()
-        #self.pair_counts_df_sorted = self.get_file_from_url.get_paired_item_dataframe()
-        #self.df_reset_freq = self.get_file_from_url.get_frequence_item_dataframe()
-        #self.df_reset_freq = self.get_file_from_url.get_rfm_cli_article_dataframe()
+        self.df_best_item_by_cli = self.get_file_from_google.get_best_item_by_cli_dataframe()
+        self.pair_counts_df_sorted = self.get_file_from_google.get_paired_item_dataframe()
+        self.df_reset_freq = self.get_file_from_google.get_frequence_item_dataframe()
+        self.rfm_cli_article_df = self.get_file_from_google.get_rfm_cli_article_dataframe()
 
         #Supprimer quand les fichiers seront sur AWS
-        self.df_best_item_by_cli = pd.read_csv("../best_item_by_cli.csv", parse_dates=True)
-        self.pair_counts_df_sorted = pd.read_csv("../paired_item.csv", parse_dates=True)
-        self.df_reset_freq = pd.read_csv("../frequence_item.csv", parse_dates=True)
-        self.rfm_cli_article_df = pd.read_csv("../cli_article_rfm_segment.csv", parse_dates=True)
+        # self.df = pd.read_csv("../KaDo_clean.csv", parse_dates=True)
+        # self.df_best_item_by_cli = pd.read_csv("../best_item_by_cli.csv", parse_dates=True)
+        # self.pair_counts_df_sorted = pd.read_csv("../paired_item.csv", parse_dates=True)
+        # self.df_reset_freq = pd.read_csv("../frequence_item.csv", parse_dates=True)
+        # self.rfm_cli_article_df = pd.read_csv("../cli_article_rfm_segment.csv", parse_dates=True)
 
 
         self.df.head()
