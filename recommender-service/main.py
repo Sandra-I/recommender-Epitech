@@ -31,7 +31,7 @@ async def startup_event():
 
 @app.get("/customers")
 def get_customer_segmentation():
-    return { "data": customer_segmenter.get_customer_RFM()}
+    return { "data": customer_segmenter.get_customer_RFM() }
 
 @app.get("/unrecommendedArticles")
 def get_most_buyed_articles():
@@ -55,12 +55,20 @@ def get_all(id):
 
 @app.get("/{cat}")
 def get_customers_data_by_category(cat):
-    return { "data": customer_segmenter.get_customers_by_category(cat)}
+    return { "data": customer_segmenter.get_customers_by_category(cat) }
 
 @app.get("/counts/{cat}")
 def get_counts_by_category(cat):
-    return { "data": customer_segmenter.get_counts_by_category(cat)}
+    return { "data": customer_segmenter.get_counts_by_category(cat) }
 
 @app.get("/counts_by_customer/{cat}")
 def get_counts_by_category(cat):
-    return { "data": customer_segmenter.get_counts_category_by_customer(cat)}
+    return { "data": customer_segmenter.get_counts_category_by_customer(cat) }
+
+@app.get("/average_basket")
+def get_average_basket():
+    return { "data": customer_segmenter.get_average_basket() }
+    
+@app.get("/average_basket/{id}")
+def get_average_basket_by_client(id):
+    return { "data": customer_segmenter.get_average_basket_by_client(id) }
