@@ -68,8 +68,17 @@ class CustomerSegmenter:
         data = { 'monetary': self.calculate_monetary(), 'frequency': self.calculate_frequency() }
         data_frame = pd.DataFrame(data=data, index=data['frequency'].index)
         average = data_frame.apply(self.division_for_average_basket, axis=1)
-        self.average_basket = average.to_json(orient="index")
+        return average
+        # self.average_basket = average.to_json(orient="index")
     
     def get_average_basket(self):
-        self.calculate_average_basket()
+        # JSON
+        average = self.calculate_average_basket()
+        self.average_basket = average.to_json(orient="index")
         return self.average_basket
+
+    def get_one_client_average_basket(self, id):
+        all_average = self.calculate_average_basket()
+        client_average = all_average.loc[int(id)]
+        return client_average
+        
