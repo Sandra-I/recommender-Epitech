@@ -43,5 +43,9 @@ def get_counts_by_category(cat):
     return { "data": customer_segmenter.get_counts_category_by_customer(cat) }
 
 @app.get("/average_basket")
-def get_customer_average_basket():
+def get_average_basket():
     return { "data": customer_segmenter.get_average_basket() }
+    
+@app.get("/average_basket/{id}")
+def get_average_basket_by_client(id):
+    return { "data": customer_segmenter.get_average_basket_by_client(id) }
