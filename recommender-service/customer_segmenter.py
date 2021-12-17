@@ -11,7 +11,6 @@ class CustomerSegmenter:
     data_by_cat = {}
     counts_by_cat = {}
     counts_cat_by_cust = {}
-    average_basket = {}
 
     def __init__(self):
         self.df = self.get_file_from_url.get_clean_dataframe()
