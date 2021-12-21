@@ -17,6 +17,7 @@ class CustomerSegmenter:
     def __init__(self):
         # self.df = self.get_file_from_url.get_clean_dataframe()
         self.df = self.get_file_from_google.get_clean_dataframe()
+        # self.df = pd.read_csv('../clean_dataset.csv', parse_dates=True)
         print(self.df.head())
 
     def create_customer_clusters(self):

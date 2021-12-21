@@ -31,6 +31,7 @@ class ItemRecommender:
         self.df_reset_freq = self.get_file_from_google.get_frequence_item_dataframe()
         self.rfm_cli_article_df = self.get_file_from_google.get_rfm_cli_article_dataframe()
 
+        # POUR FAIRE TOURNER EN AYANT LES FICHIERS EN LOCAL
         #Supprimer quand les fichiers seront sur AWS
         # self.df = pd.read_csv("../KaDo_clean.csv", parse_dates=True)
         # self.df_best_item_by_cli = pd.read_csv("../best_item_by_cli.csv", parse_dates=True)
