@@ -1,11 +1,11 @@
 import pandas as pd
 # from get_file_from_url import GetFileFromUrl
-from google_api.get_file_from_google import GetFileFromGoogleDrive
+# from google_api.get_file_from_google import GetFileFromGoogleDrive
 
 class CustomerSegmenter:
 
     # get_file_from_url = GetFileFromUrl()
-    get_file_from_google = GetFileFromGoogleDrive()
+    # get_file_from_google = GetFileFromGoogleDrive()
     customer_cluster_result = 0
     df = pd.DataFrame()
     customer_rfm = {}
@@ -16,7 +16,8 @@ class CustomerSegmenter:
 
     def __init__(self):
         # self.df = self.get_file_from_url.get_clean_dataframe()
-        self.df = self.get_file_from_google.get_clean_dataframe()
+        # self.df = self.get_file_from_google.get_clean_dataframe()
+        self.df = pd.read_csv('../clean_dataset.csv', parse_dates=True)
         print(self.df.head())
 
     def create_customer_clusters(self):
