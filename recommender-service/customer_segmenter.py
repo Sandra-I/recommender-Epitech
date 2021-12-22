@@ -87,4 +87,7 @@ class CustomerSegmenter:
         data_frame = self.df[['CLI_ID', 'TICKET_ID']].groupby('CLI_ID').agg(pd.Series.nunique)
         return pd.qcut(data_frame['TICKET_ID'], q=2, labels=['OCCASIONNEL','REGULIER'])
 
-        
+    def get_frequency_group_by_customer(self, id):
+        freq_group_series = self.calculate_frequency_group()
+        freq_group = freq_group_series.loc[int(id)]
+        return { 'frequency_group': freq_group }
