@@ -45,23 +45,23 @@ async def startup_event():
 def get_customer_segmentation():
     return { "data": customer_segmenter.get_customer_RFM() }
 
-@app.get("/unrecommendedArticles", tags=["RECOMMENDER"])
+@app.get("/unrecommendedArticles")
 def get_most_buyed_articles():
     return { "data": item_recommender.get_unpersonalized_recommendation(10)}
 
-@app.get("/pairedArticles/{id}", tags=["RECOMMENDER"])
+@app.get("/pairedArticles/{id}")
 def get_paired_articles(id):
     return {"data": item_recommender.get_often_buy_together_articles(id)}
 
-@app.get("/closestArticle/{id}", tags=["RECOMMENDER"])
+@app.get("/closestArticle/{id}")
 def get_closest_article(id):
     return {"data": item_recommender.get_closest_product_by_customer(id)}
 
-@app.get("/neighborMostBuyedArticle/{id}", tags=["RECOMMENDER"])
+@app.get("/neighborMostBuyedArticle/{id}")
 def get_article_from_closest_customer(id):
     return {"data": item_recommender.get_article_from_similar_client(id)}
 
-@app.get("/all/{id}", tags=["RECOMMENDER"])
+@app.get("/all/{id}")
 def get_all(id):
     return {"data": item_recommender.get_personnalized_recommendation_for_a_user(id)}
 
@@ -84,3 +84,12 @@ def get_average_basket():
 @app.get("/average_basket/{id}", tags=["RFM"])
 def get_average_basket_by_client(id):
     return { "data": customer_segmenter.get_average_basket_by_client(id) }
+
+@app.get("/frequency", tags=["RFM"])
+def get_mean_frequency():
+    return { "data": customer_segmenter.get_mean_frequency() }
+
+
+@app.get("/frequency/{id}", tags=["RFM"])
+def get_frequency_by_customer(id):
+    return { "data": customer_segmenter.get_frequency_by_customer(id) }
