@@ -1,11 +1,11 @@
 import pandas as pd
 # from get_file_from_url import GetFileFromUrl
-from google_api.get_file_from_google import GetFileFromGoogleDrive
+# from google_api.get_file_from_google import GetFileFromGoogleDrive
 
 class CustomerSegmenter:
 
     # get_file_from_url = GetFileFromUrl()
-    get_file_from_google = GetFileFromGoogleDrive()
+    # get_file_from_google = GetFileFromGoogleDrive()
     customer_cluster_result = 0
     df = pd.DataFrame()
     customer_rfm = {}
@@ -16,8 +16,9 @@ class CustomerSegmenter:
 
     def __init__(self):
         # self.df = self.get_file_from_url.get_clean_dataframe()
-        self.df = self.get_file_from_google.get_clean_dataframe()
-        # self.df = pd.read_csv('../clean_dataset.csv', parse_dates=True)
+        # self.df = self.get_file_from_google.get_clean_dataframe()
+        self.df = pd.read_csv('../clean_dataset.csv', parse_dates=True)
+        self.df = self.df.tail(n = 50)
         print(self.df.head())
 
     def create_customer_clusters(self):
@@ -81,4 +82,17 @@ class CustomerSegmenter:
         all_average = self.calculate_average_basket()
         client_average = all_average.loc[int(id)]
         return client_average
-        
+
+    def frequency_to_dataframe(self):
+        data = { 'frequency': self.calculate_frequency() }
+        return pd.DataFrame(data=data, index=data['frequency'].index)
+    
+    def get_mean_frequency(self):
+        data_frame = self.frequency_to_dataframe()
+        mean_frequency = data_frame.mean()
+        return mean_frequency.to_json(orient="index")
+
+    def get_frequency_by_customer(self, id):
+        data_frame = self.frequency_to_dataframe()
+        client_frequency = data_frame.loc[int(id)]
+        return client_frequency.to_json(orient="index")
