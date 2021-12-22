@@ -1,11 +1,11 @@
 import pandas as pd
 # from get_file_from_url import GetFileFromUrl
-from google_api.get_file_from_google import GetFileFromGoogleDrive
+# from google_api.get_file_from_google import GetFileFromGoogleDrive
 
 class CustomerSegmenter:
 
     # get_file_from_url = GetFileFromUrl()
-    get_file_from_google = GetFileFromGoogleDrive()
+    # get_file_from_google = GetFileFromGoogleDrive()
     customer_cluster_result = 0
     df = pd.DataFrame()
     customer_rfm = {}
@@ -16,8 +16,9 @@ class CustomerSegmenter:
 
     def __init__(self):
         # self.df = self.get_file_from_url.get_clean_dataframe()
-        self.df = self.get_file_from_google.get_clean_dataframe()
-        # self.df = pd.read_csv('../clean_dataset.csv', parse_dates=True)
+        # self.df = self.get_file_from_google.get_clean_dataframe()
+        self.df = pd.read_csv('../clean_dataset.csv', parse_dates=True)
+        # self.df = self.df.tail(n = 50)
         print(self.df.head())
 
     def create_customer_clusters(self):
@@ -81,4 +82,13 @@ class CustomerSegmenter:
         all_average = self.calculate_average_basket()
         client_average = all_average.loc[int(id)]
         return client_average
-        
+
+    def calculate_recency_group(self):
+        cli_last_purchase = self.df[['CLI_ID', 'MOIS_VENTE']].groupby('CLI_ID').agg('max')
+        cli_recency = 13 - cli_last_purchase
+        return pd.qcut(cli_recency['MOIS_VENTE'], q=3, labels=['ACTIVE','OCCASIONNEL','INACTIVE'])
+
+    def get_recency_group_by_customer(self, id):
+        recency_group_series = self.calculate_recency_group()
+        customer_group = recency_group_series.loc[int(id)]
+        return { 'recency_group': customer_group }
