@@ -1,6 +1,6 @@
 from pydantic.main import BaseModel
 from customer_segmenter import CustomerSegmenter
-# from item_recommender import ItemRecommender
+from item_recommender import ItemRecommender
 import pandas as pd
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -33,41 +33,41 @@ app.add_middleware(
 
 
 customer_segmenter = CustomerSegmenter()
-# item_recommender = ItemRecommender()
+item_recommender = ItemRecommender()
 
 
-# @app.on_event("startup")
-# async def startup_event():
-#     customer_segmenter.create_customer_clusters()
-    # item_recommender.create_unique_item_df()
+@app.on_event("startup")
+async def startup_event():
+    customer_segmenter.create_customer_clusters()
+    item_recommender.create_unique_item_df()
 
 @app.get("/customers", tags=["RFM"])
 def get_customer_segmentation():
     return { "data": customer_segmenter.get_customer_RFM() }
 
-# @app.get("/unrecommendedArticles", tags=["RECOMMENDER"])
-# def get_most_buyed_articles():
-#     return { "data": item_recommender.get_unpersonalized_recommendation(10)}
+@app.get("/unrecommendedArticles", tags=["RECOMMENDER"])
+def get_most_buyed_articles():
+    return { "data": item_recommender.get_unpersonalized_recommendation(10)}
 
-# @app.get("/pairedArticles/{id}", tags=["RECOMMENDER"])
-# def get_paired_articles(id):
-#     return {"data": item_recommender.get_often_buy_together_articles(id)}
+@app.get("/pairedArticles/{id}", tags=["RECOMMENDER"])
+def get_paired_articles(id):
+    return {"data": item_recommender.get_often_buy_together_articles(id)}
 
-# @app.get("/closestArticle/{id}", tags=["RECOMMENDER"])
-# def get_closest_article(id):
-#     return {"data": item_recommender.get_closest_product_by_customer(id)}
+@app.get("/closestArticle/{id}", tags=["RECOMMENDER"])
+def get_closest_article(id):
+    return {"data": item_recommender.get_closest_product_by_customer(id)}
 
-# @app.get("/neighborMostBuyedArticle/{id}", tags=["RECOMMENDER"])
-# def get_article_from_closest_customer(id):
-#     return {"data": item_recommender.get_article_from_similar_client(id)}
+@app.get("/neighborMostBuyedArticle/{id}", tags=["RECOMMENDER"])
+def get_article_from_closest_customer(id):
+    return {"data": item_recommender.get_article_from_similar_client(id)}
 
-# @app.get("/all/{id}", tags=["RECOMMENDER"])
-# def get_all(id):
-#     return {"data": item_recommender.get_personnalized_recommendation_for_a_user(id)}
+@app.get("/all/{id}", tags=["RECOMMENDER"])
+def get_all(id):
+    return {"data": item_recommender.get_personnalized_recommendation_for_a_user(id)}
 
-# @app.get("/{cat}", tags=["RFM"])
-# def get_customers_data_by_category(cat):
-#     return { "data": customer_segmenter.get_customers_by_category(cat) }
+@app.get("/{cat}", tags=["RFM"])
+def get_customers_data_by_category(cat):
+    return { "data": customer_segmenter.get_customers_by_category(cat) }
 
 @app.get("/counts/{cat}", tags=["RFM"])
 def get_counts_by_category(cat):
@@ -84,6 +84,11 @@ def get_average_basket():
 @app.get("/average_basket/{id}", tags=["RFM"])
 def get_average_basket_by_client(id):
     return { "data": customer_segmenter.get_average_basket_by_client(id) }
+
+
+@app.get("/recency_group", tags=["RFM"])
+def get_recency_group():
+    return { "data": customer_segmenter.get_recency_group() }
 
 @app.get("/recency_group/{id}", tags=["RFM"])
 def get_recency_group_by_customer(id):

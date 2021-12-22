@@ -88,6 +88,14 @@ class CustomerSegmenter:
         cli_recency = 13 - cli_last_purchase
         return pd.qcut(cli_recency['MOIS_VENTE'], q=3, labels=['ACTIVE','OCCASIONNEL','INACTIVE'])
 
+    def get_recency_group(self):
+        recency_group_series = self.calculate_recency_group()
+        recency_counts = recency_group_series.value_counts()
+        recency_percent_counts = recency_group_series.value_counts(normalize=True)
+        data = { 'recency_counts': recency_counts, 'recency_percent_counts': recency_percent_counts }
+        data_frame = pd.DataFrame(data=data, index=data['recency_counts'].index)
+        return data_frame.to_json(orient="index")
+
     def get_recency_group_by_customer(self, id):
         recency_group_series = self.calculate_recency_group()
         customer_group = recency_group_series.loc[int(id)]
