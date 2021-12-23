@@ -17,7 +17,7 @@ tags_metadata = [
     },
     {
         "name": "RECOMMENDER",
-        "description": "Permet d'obtenir quatre types de recommandation, en fonction de l'id du client. Les types de reco : 1. Achetés fréquemment ensemble. 2. Produits similaires. 3. Produits d'utilisateurs similaires. 4. Articles les plus achetés sur le site."
+        "description": "Permet d'obtenir quatre types de recommandations, en fonction de l'id du client. Les types de reco : 1. Achetés fréquemment ensemble. 2. Produits similaires. 3. Produits d'utilisateurs similaires. 4. Articles les plus achetés sur le site."
     },
 ]
 
@@ -61,8 +61,12 @@ def get_closest_article(id):
 def get_article_from_closest_customer(id):
     return {"data": item_recommender.get_article_from_similar_client(id)}
 
-@app.get("/all/{id}")
-def get_all(id):
+@app.get("/most_buyed_product_of_an_user/{id}", tags=["RECOMMENDER"])
+def get_most_buyed_product_of_an_user(id):
+    return {"data": item_recommender.get_user_most_buyed_articles(id)}
+
+@app.get("/all/{id}", tags=["RECOMMENDER"])
+def get_all_personalized_recommendation_for_a_user(id):
     return {"data": item_recommender.get_personnalized_recommendation_for_a_user(id)}
 
 @app.get("/{cat}", tags=["RFM"])
