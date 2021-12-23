@@ -109,6 +109,14 @@ def get_frequency_group_by_customer(id):
 def get_mean_frequency():
     return { "data": customer_segmenter.get_mean_frequency() }
 
+@app.get("/recency/{id}", tags=["RFM"])
+def get_recency_by_customer(id):
+    return { "data": customer_segmenter.get_recency_by_customer(id) }
+
 @app.get("/frequency/{id}", tags=["RFM"])
 def get_frequency_by_customer(id):
     return { "data": customer_segmenter.get_frequency_by_customer(id) }
+
+@app.get("/customers_details/{id}", tags=["RFM"])
+def get_details_by_customer(id):
+    return { "data": customer_segmenter.get_details_by_customer(id) }

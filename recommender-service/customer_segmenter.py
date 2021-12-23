@@ -81,7 +81,7 @@ class CustomerSegmenter:
     def get_average_basket_by_client(self, id):
         all_average = self.calculate_average_basket()
         client_average = all_average.loc[int(id)]
-        return client_average
+        return { 'average_basket': client_average }
 
     def calculate_recency_group(self):
         cli_last_purchase = self.df[['CLI_ID', 'MOIS_VENTE']].groupby('CLI_ID').agg('max')
@@ -100,7 +100,13 @@ class CustomerSegmenter:
         recency_group_series = self.calculate_recency_group()
         customer_group = recency_group_series.loc[int(id)]
         return { 'recency_group': customer_group }
-
+    
+    def get_recency_by_customer(self, id):
+        data = { 'recency': self.calculate_recency() }
+        recency_dataframe = pd.DataFrame(data=data, index=data['recency'].index)
+        customer_recency = recency_dataframe.loc[int(id)]
+        return customer_recency.to_json()
+    
     def calculate_frequency_group(self):
         data_frame = self.df[['CLI_ID', 'TICKET_ID']].groupby('CLI_ID').agg(pd.Series.nunique)
         return pd.qcut(data_frame['TICKET_ID'], q=2, labels=['OCCASIONNEL','REGULIER'])
@@ -131,3 +137,11 @@ class CustomerSegmenter:
         data_frame = self.frequency_to_dataframe()
         client_frequency = data_frame.loc[int(id)]
         return client_frequency.to_json(orient="index")
+
+    def get_details_by_customer(self, id):
+        avg = self.get_average_basket_by_client(id)
+        rec_grp = self.get_recency_group_by_customer(id)
+        rec =  self.get_recency_by_customer(id)
+        freq_grp = self.get_frequency_group_by_customer(id)
+        freq = self.get_frequency_by_customer(id)
+        return id, avg, rec_grp, rec, freq_grp, freq
