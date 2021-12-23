@@ -18,7 +18,7 @@ class CustomerSegmenter:
         # self.df = self.get_file_from_url.get_clean_dataframe()
         # self.df = self.get_file_from_google.get_clean_dataframe()
         self.df = pd.read_csv('../clean_dataset.csv', parse_dates=True)
-        self.df = self.df.tail(n = 50)
+        # self.df = self.df.tail(n = 50)
         print(self.df.head())
 
     def create_customer_clusters(self):
@@ -86,6 +86,14 @@ class CustomerSegmenter:
     def calculate_frequency_group(self):
         data_frame = self.df[['CLI_ID', 'TICKET_ID']].groupby('CLI_ID').agg(pd.Series.nunique)
         return pd.qcut(data_frame['TICKET_ID'], q=2, labels=['OCCASIONNEL','REGULIER'])
+
+    def get_frequency_group_repartition(self):
+        freq_group_series = self.calculate_frequency_group()
+        freq_counts = freq_group_series.value_counts()
+        freq_percent_counts = freq_group_series.value_counts(normalize=True)
+        data = { 'recency_counts': freq_counts, 'recency_percent_counts': freq_percent_counts }
+        data_frame = pd.DataFrame(data=data, index=data['recency_counts'].index)
+        return data_frame.to_json(orient="index")
 
     def get_frequency_group_by_customer(self, id):
         freq_group_series = self.calculate_frequency_group()

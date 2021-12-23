@@ -85,6 +85,10 @@ def get_average_basket():
 def get_average_basket_by_client(id):
     return { "data": customer_segmenter.get_average_basket_by_client(id) }
 
+@app.get("/frequency_group", tags=["RFM"])
+def get_frequency_group_repartition():
+    return { "data": customer_segmenter.get_frequency_group_repartition() }
+
 @app.get("/frequency_group/{id}", tags=["RFM"])
 def get_frequency_group_by_customer(id):
     return { "data": customer_segmenter.get_frequency_group_by_customer(id) }
