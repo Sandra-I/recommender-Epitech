@@ -100,3 +100,34 @@ class CustomerSegmenter:
         recency_group_series = self.calculate_recency_group()
         customer_group = recency_group_series.loc[int(id)]
         return { 'recency_group': customer_group }
+
+    def calculate_frequency_group(self):
+        data_frame = self.df[['CLI_ID', 'TICKET_ID']].groupby('CLI_ID').agg(pd.Series.nunique)
+        return pd.qcut(data_frame['TICKET_ID'], q=2, labels=['OCCASIONNEL','REGULIER'])
+
+    def get_frequency_group_repartition(self):
+        freq_group_series = self.calculate_frequency_group()
+        freq_counts = freq_group_series.value_counts()
+        freq_percent_counts = freq_group_series.value_counts(normalize=True)
+        data = { 'recency_counts': freq_counts, 'recency_percent_counts': freq_percent_counts }
+        data_frame = pd.DataFrame(data=data, index=data['recency_counts'].index)
+        return data_frame.to_json(orient="index")
+
+    def get_frequency_group_by_customer(self, id):
+        freq_group_series = self.calculate_frequency_group()
+        freq_group = freq_group_series.loc[int(id)]
+        return { 'frequency_group': freq_group }
+
+    def frequency_to_dataframe(self):
+        data = { 'frequency': self.calculate_frequency() }
+        return pd.DataFrame(data=data, index=data['frequency'].index)
+    
+    def get_mean_frequency(self):
+        data_frame = self.frequency_to_dataframe()
+        mean_frequency = data_frame.mean()
+        return mean_frequency.to_json(orient="index")
+
+    def get_frequency_by_customer(self, id):
+        data_frame = self.frequency_to_dataframe()
+        client_frequency = data_frame.loc[int(id)]
+        return client_frequency.to_json(orient="index")

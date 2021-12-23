@@ -1,7 +1,6 @@
 import pandas as pd
 from itertools import permutations
 from sklearn.metrics.pairwise import cosine_similarity
-# from get_file_from_url import GetFileFromUrl
 import numpy as np 
 from google_api.get_file_from_google import GetFileFromGoogleDrive
 class ItemRecommender:
@@ -12,7 +11,6 @@ class ItemRecommender:
     pair_counts_df_sorted = pd.DataFrame()
     rfm_cli_article_df = pd.DataFrame()
     df_reset_freq = pd.DataFrame()
-    # get_file_from_url = GetFileFromUrl()
     get_file_from_google = GetFileFromGoogleDrive()
 
     most_buyed_articles = {}
@@ -20,26 +18,11 @@ class ItemRecommender:
     unpersonnalized_recommended_items = []
 
     def __init__(self):
-        
-        #self.get_file_from_url.get_clean_dataframe()
-
-        self.df = self.get_file_from_google.get_clean_dataframe()
-        
-        #Décommenter quand les fichiers seront sur AWS
+        self.df = self.get_file_from_google.get_clean_dataframe() 
         self.df_best_item_by_cli = self.get_file_from_google.get_best_item_by_cli_dataframe()
         self.pair_counts_df_sorted = self.get_file_from_google.get_paired_item_dataframe()
         self.df_reset_freq = self.get_file_from_google.get_frequence_item_dataframe()
         self.rfm_cli_article_df = self.get_file_from_google.get_rfm_cli_article_dataframe()
-
-        # POUR FAIRE TOURNER EN AYANT LES FICHIERS EN LOCAL
-        #Supprimer quand les fichiers seront sur AWS
-        # self.df = pd.read_csv("../KaDo_clean.csv", parse_dates=True)
-        # self.df_best_item_by_cli = pd.read_csv("../best_item_by_cli.csv", parse_dates=True)
-        # self.pair_counts_df_sorted = pd.read_csv("../paired_item.csv", parse_dates=True)
-        # self.df_reset_freq = pd.read_csv("../frequence_item.csv", parse_dates=True)
-        # self.rfm_cli_article_df = pd.read_csv("../cli_article_rfm_segment.csv", parse_dates=True)
-
-
         self.df.head()
     
     def create_unique_item_df(self):
@@ -91,7 +74,6 @@ class ItemRecommender:
 
     def get_article_from_similar_client(self, customerId):
         user = self.rfm_cli_article_df[self.rfm_cli_article_df["CLI_ID"] == int(customerId)]
-        print(user)
         similar_users = self.rfm_cli_article_df[(self.rfm_cli_article_df["RFM_SEGMENT"] == user["RFM_SEGMENT"].values[0]) & (self.rfm_cli_article_df["Most_Buyed_Article"] == user["Most_Buyed_Article"].values[0])][:3]
         closest_product = []
         for i in range(1,3):
@@ -101,10 +83,12 @@ class ItemRecommender:
     
     def get_personnalized_recommendation_for_a_user(self, customerId):
         data = {}
+        mb = self.get_user_most_buyed_articles(customerId)
+        data["most_buyed_article"] = mb["LIBELLE"].values[0]
         of = self.get_often_buy_together_articles(customerId)
-        data["Acheté fréquemment ensemble :"] = of
+        data["paired_articles"] = of
         cl = self.get_closest_product_by_customer(customerId)
-        data["Produits similaires :"] = cl
+        data["similar_product"] = cl
         sm = self.get_article_from_similar_client(customerId)
-        data["des utilisateurs similaires ont également acheté :"] = sm
+        data["similar_user_product"] = sm
         return data
