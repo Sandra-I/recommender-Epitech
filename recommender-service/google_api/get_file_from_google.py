@@ -13,6 +13,7 @@ class GetFileFromGoogleDrive:
 
     file_ids = ['1YzBXfLqRCm5yAs48mgmPIemhlUaV0jNJ', '1WM9kvmlOhzuyepk77R7k0UM2-PAngkQ0', '1J1zoy6uPfCciaQH0WLMhMeC-b3SDV80m', '1PAy6z1PHJMCaAmWGmQXqf25epPAdplgn', '1UP8JwG0v9Nv6nUAYfc4kowbHeJ861lA0']
 
+    # Ordre des ids correspondant à l'ordre des noms ci-dessous
     # file_names = ['clean_dataset.csv', 'best_item_by_cli.csv', 'frequence_item.csv', 'paired_item.csv', 'cli_article_rfm_segment.csv']
 
     clean_dataset = pd.DataFrame()
@@ -47,6 +48,8 @@ class GetFileFromGoogleDrive:
 
             elif file_id == '1UP8JwG0v9Nv6nUAYfc4kowbHeJ861lA0':
                 self.cli_article_rfm_segment = pd.read_csv(fh, parse_dates=True)
+
+        print('Downloading end')
 
     def get_clean_dataframe(self):
         return self.clean_dataset
