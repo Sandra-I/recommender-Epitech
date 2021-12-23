@@ -83,6 +83,24 @@ class CustomerSegmenter:
         client_average = all_average.loc[int(id)]
         return client_average
 
+    def calculate_recency_group(self):
+        cli_last_purchase = self.df[['CLI_ID', 'MOIS_VENTE']].groupby('CLI_ID').agg('max')
+        cli_recency = 13 - cli_last_purchase
+        return pd.qcut(cli_recency['MOIS_VENTE'], q=3, labels=['ACTIVE','OCCASIONNEL','INACTIVE'])
+
+    def get_recency_group(self):
+        recency_group_series = self.calculate_recency_group()
+        recency_counts = recency_group_series.value_counts()
+        recency_percent_counts = recency_group_series.value_counts(normalize=True)
+        data = { 'recency_counts': recency_counts, 'recency_percent_counts': recency_percent_counts }
+        data_frame = pd.DataFrame(data=data, index=data['recency_counts'].index)
+        return data_frame.to_json(orient="index")
+
+    def get_recency_group_by_customer(self, id):
+        recency_group_series = self.calculate_recency_group()
+        customer_group = recency_group_series.loc[int(id)]
+        return { 'recency_group': customer_group }
+
     def calculate_frequency_group(self):
         data_frame = self.df[['CLI_ID', 'TICKET_ID']].groupby('CLI_ID').agg(pd.Series.nunique)
         return pd.qcut(data_frame['TICKET_ID'], q=2, labels=['OCCASIONNEL','REGULIER'])
