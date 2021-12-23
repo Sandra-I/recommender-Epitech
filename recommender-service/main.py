@@ -17,7 +17,7 @@ tags_metadata = [
     },
     {
         "name": "RECOMMENDER",
-        "description": "Permet d'obtenir quatre types de recommandation, en fonction de l'id du client. Les types de reco : 1. Achetés fréquemment ensemble. 2. Produits similaires. 3. Produits d'utilisateurs similaires. 4. Articles les plus achetés sur le site."
+        "description": "Permet d'obtenir quatre types de recommandations, en fonction de l'id du client. Les types de reco : 1. Achetés fréquemment ensemble. 2. Produits similaires. 3. Produits d'utilisateurs similaires. 4. Articles les plus achetés sur le site."
     },
 ]
 
@@ -45,24 +45,28 @@ async def startup_event():
 def get_customer_segmentation():
     return { "data": customer_segmenter.get_customer_RFM() }
 
-@app.get("/unrecommendedArticles", tags=["RECOMMENDER"])
+@app.get("/unrecommendedArticles")
 def get_most_buyed_articles():
     return { "data": item_recommender.get_unpersonalized_recommendation(10)}
 
-@app.get("/pairedArticles/{id}", tags=["RECOMMENDER"])
+@app.get("/pairedArticles/{id}")
 def get_paired_articles(id):
     return {"data": item_recommender.get_often_buy_together_articles(id)}
 
-@app.get("/closestArticle/{id}", tags=["RECOMMENDER"])
+@app.get("/closestArticle/{id}")
 def get_closest_article(id):
     return {"data": item_recommender.get_closest_product_by_customer(id)}
 
-@app.get("/neighborMostBuyedArticle/{id}", tags=["RECOMMENDER"])
+@app.get("/neighborMostBuyedArticle/{id}")
 def get_article_from_closest_customer(id):
     return {"data": item_recommender.get_article_from_similar_client(id)}
 
+@app.get("/most_buyed_product_of_an_user/{id}", tags=["RECOMMENDER"])
+def get_most_buyed_product_of_an_user(id):
+    return {"data": item_recommender.get_user_most_buyed_articles(id)}
+
 @app.get("/all/{id}", tags=["RECOMMENDER"])
-def get_all(id):
+def get_all_personalized_recommendation_for_a_user(id):
     return {"data": item_recommender.get_personnalized_recommendation_for_a_user(id)}
 
 @app.get("/{cat}", tags=["RFM"])
@@ -92,3 +96,11 @@ def get_frequency_group_repartition():
 @app.get("/frequency_group/{id}", tags=["RFM"])
 def get_frequency_group_by_customer(id):
     return { "data": customer_segmenter.get_frequency_group_by_customer(id) }
+
+@app.get("/frequency", tags=["RFM"])
+def get_mean_frequency():
+    return { "data": customer_segmenter.get_mean_frequency() }
+
+@app.get("/frequency/{id}", tags=["RFM"])
+def get_frequency_by_customer(id):
+    return { "data": customer_segmenter.get_frequency_by_customer(id) }

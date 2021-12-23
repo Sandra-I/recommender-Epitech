@@ -99,3 +99,17 @@ class CustomerSegmenter:
         freq_group_series = self.calculate_frequency_group()
         freq_group = freq_group_series.loc[int(id)]
         return { 'frequency_group': freq_group }
+
+    def frequency_to_dataframe(self):
+        data = { 'frequency': self.calculate_frequency() }
+        return pd.DataFrame(data=data, index=data['frequency'].index)
+    
+    def get_mean_frequency(self):
+        data_frame = self.frequency_to_dataframe()
+        mean_frequency = data_frame.mean()
+        return mean_frequency.to_json(orient="index")
+
+    def get_frequency_by_customer(self, id):
+        data_frame = self.frequency_to_dataframe()
+        client_frequency = data_frame.loc[int(id)]
+        return client_frequency.to_json(orient="index")
