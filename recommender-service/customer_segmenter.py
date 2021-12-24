@@ -145,3 +145,13 @@ class CustomerSegmenter:
         freq_grp = self.get_frequency_group_by_customer(id)
         freq = self.get_frequency_by_customer(id)
         return id, avg, rec_grp, rec, freq_grp, freq
+
+    def generate_csv_details(self):
+        all_average_series = self.calculate_average_basket()
+        all_frequencies_series = self.calculate_frequency()
+        all_freq_group_series = self.calculate_frequency_group()    
+        all_recency_series = self.calculate_recency()
+        all_recency_group_series = self.calculate_recency_group()
+        df_stitched = pd.concat([all_average_series, all_frequencies_series, all_freq_group_series, all_recency_series, all_recency_group_series], axis=1)
+        df_stitched.to_csv('csv_details_by_customer.csv')
+        return { 'average_basket': 'client_average' }
