@@ -120,3 +120,11 @@ def get_frequency_by_customer(id):
 @app.get("/customers_details/{id}", tags=["RFM"])
 def get_details_by_customer(id):
     return { "data": customer_segmenter.get_details_by_customer(id) }
+
+@app.get("/customers_details/{id}", tags=["RFM"])
+def get_customer_details_in_csv(id):
+    return { "data": customer_segmenter.get_customer_details_in_csv(id) }
+
+@app.get("/generate_csv", tags=["RFM"])
+def generate_csv_details():
+    return { "data": customer_segmenter.generate_csv_details() }

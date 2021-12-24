@@ -8,6 +8,7 @@ class CustomerSegmenter:
     # get_file_from_google = GetFileFromGoogleDrive()
     customer_cluster_result = 0
     df = pd.DataFrame()
+    df_cutomer_details = pd.DataFrame()
     customer_rfm = {}
     customer_family = {}
     data_by_cat = {}
@@ -17,6 +18,7 @@ class CustomerSegmenter:
     def __init__(self):
         # self.df = self.get_file_from_url.get_clean_dataframe()
         # self.df = self.get_file_from_google.get_clean_dataframe()
+        # self.df_customer_details = self.get_file_from_google.get_csv_details_by_customer()
         self.df = pd.read_csv('../clean_dataset.csv', parse_dates=True)
         # self.df = self.df.tail(n = 50)
         print(self.df.head())
@@ -145,3 +147,20 @@ class CustomerSegmenter:
         freq_grp = self.get_frequency_group_by_customer(id)
         freq = self.get_frequency_by_customer(id)
         return id, avg, rec_grp, rec, freq_grp, freq
+
+    def generate_csv_details(self):
+        all_average_series = self.calculate_average_basket()
+        all_frequencies_series = self.calculate_frequency()
+        all_freq_group_series = self.calculate_frequency_group()
+        all_recency_series = self.calculate_recency()
+        all_recency_group_series = self.calculate_recency_group()   
+        df_stitched = pd.concat([all_average_series, all_frequencies_series, all_freq_group_series, all_recency_series, all_recency_group_series], axis=1)
+        df_stitched.columns = ['average', 'frequency', 'frequency_group', 'recency', 'recency_group']
+        df_stitched.to_csv('csv_details_by_customer.csv')
+        return { 'average_basket': 'client_average' }
+    
+    def get_customer_details_in_csv(self, id):
+        # df = self.df_customer_details
+        df = pd.read_csv('csv_details_by_customer.csv')
+        customer = df[df['CLI_ID'] == int(id)]
+        return customer.to_json(orient="index")

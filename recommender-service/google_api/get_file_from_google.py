@@ -11,16 +11,17 @@ class GetFileFromGoogleDrive:
 
     service = Create_Service(CLIENT_SECRET_FILE, API_NAME, API_VERSION, SCOPES)
 
-    file_ids = ['1YzBXfLqRCm5yAs48mgmPIemhlUaV0jNJ', '1WM9kvmlOhzuyepk77R7k0UM2-PAngkQ0', '1J1zoy6uPfCciaQH0WLMhMeC-b3SDV80m', '1PAy6z1PHJMCaAmWGmQXqf25epPAdplgn', '1UP8JwG0v9Nv6nUAYfc4kowbHeJ861lA0']
+    file_ids = ['1YzBXfLqRCm5yAs48mgmPIemhlUaV0jNJ', '1WM9kvmlOhzuyepk77R7k0UM2-PAngkQ0', '1J1zoy6uPfCciaQH0WLMhMeC-b3SDV80m', '1PAy6z1PHJMCaAmWGmQXqf25epPAdplgn', '1UP8JwG0v9Nv6nUAYfc4kowbHeJ861lA0', '1VuMXGiRjb3IDxk61NQJp6h42T9Z0Ahld']
 
     # Ordre des ids correspondant à l'ordre des noms ci-dessous
-    # file_names = ['clean_dataset.csv', 'best_item_by_cli.csv', 'frequence_item.csv', 'paired_item.csv', 'cli_article_rfm_segment.csv']
+    # file_names = ['clean_dataset.csv', 'best_item_by_cli.csv', 'frequence_item.csv', 'paired_item.csv', 'cli_article_rfm_segment.csv', 'csv_details_by_customer.csv']
 
     clean_dataset = pd.DataFrame()
     best_item_by_cli_df = pd.DataFrame()
     frequence_item_df = pd.DataFrame()
     paired_item_df = pd.DataFrame()
     cli_article_rfm_segment = pd.DataFrame()
+    csv_details_by_customer = pd.DataFrame()
 
     def __init__(self):
         for file_id in self.file_ids:
@@ -49,6 +50,9 @@ class GetFileFromGoogleDrive:
             elif file_id == '1UP8JwG0v9Nv6nUAYfc4kowbHeJ861lA0':
                 self.cli_article_rfm_segment = pd.read_csv(fh, parse_dates=True)
 
+            elif file_id == '1VuMXGiRjb3IDxk61NQJp6h42T9Z0Ahld':
+                self.csv_details_by_customer = pd.read_csv(fh)
+
         print('Downloading end')
 
     def get_clean_dataframe(self):
@@ -65,3 +69,6 @@ class GetFileFromGoogleDrive:
 
     def get_rfm_cli_article_dataframe(self):
         return self.cli_article_rfm_segment
+
+    def get_csv_details_by_customer(self):
+        return self.csv_details_by_customer
