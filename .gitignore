@@ -159,5 +159,4 @@ About
 # workspace
 /workspace.xml
 .idea/
-
 recommender-service/*.pickle
