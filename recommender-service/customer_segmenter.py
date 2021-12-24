@@ -148,10 +148,23 @@ class CustomerSegmenter:
 
     def generate_csv_details(self):
         all_average_series = self.calculate_average_basket()
+        print(all_average_series)
         all_frequencies_series = self.calculate_frequency()
-        all_freq_group_series = self.calculate_frequency_group()    
+        print(all_frequencies_series)
+        all_freq_group_series = self.calculate_frequency_group()
+        print(all_freq_group_series)    
         all_recency_series = self.calculate_recency()
+        print(all_recency_series)
         all_recency_group_series = self.calculate_recency_group()
+        print(all_recency_group_series)
         df_stitched = pd.concat([all_average_series, all_frequencies_series, all_freq_group_series, all_recency_series, all_recency_group_series], axis=1)
-        df_stitched.to_csv('csv_details_by_customer.csv')
+        print(df_stitched)
+        # df_stitched.to_csv('csv_details_by_customer.csv')
         return { 'average_basket': 'client_average' }
+    
+    def get_customer_details_in_csv(self, id):
+        df = pd.read_csv('csv_details_by_customer.csv')
+        print(df)
+        customer = df[df['CLI_ID'] == int(id)]
+        print(customer)
+        return customer.to_json(orient="index")
