@@ -8,6 +8,7 @@ class CustomerSegmenter:
     # get_file_from_google = GetFileFromGoogleDrive()
     customer_cluster_result = 0
     df = pd.DataFrame()
+    df_cutomer_details = pd.DataFrame()
     customer_rfm = {}
     customer_family = {}
     data_by_cat = {}
@@ -17,6 +18,7 @@ class CustomerSegmenter:
     def __init__(self):
         # self.df = self.get_file_from_url.get_clean_dataframe()
         # self.df = self.get_file_from_google.get_clean_dataframe()
+        # self.df_customer_details = self.get_file_from_google.get_csv_details_by_customer()
         self.df = pd.read_csv('../clean_dataset.csv', parse_dates=True)
         # self.df = self.df.tail(n = 50)
         print(self.df.head())
@@ -158,6 +160,7 @@ class CustomerSegmenter:
         return { 'average_basket': 'client_average' }
     
     def get_customer_details_in_csv(self, id):
+        # df = self.df_customer_details
         df = pd.read_csv('csv_details_by_customer.csv')
         customer = df[df['CLI_ID'] == int(id)]
         return customer.to_json(orient="index")
