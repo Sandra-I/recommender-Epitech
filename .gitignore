@@ -2,7 +2,8 @@ clean_dataset.csv
 RFM_data.csv
 RFM.csv
 KaDo.csv
-   
+csv_details_by_customer.csv
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 recommender-env/
@@ -158,3 +159,4 @@ About
 # workspace
 /workspace.xml
 .idea/
+recommender-service/*.pickle
