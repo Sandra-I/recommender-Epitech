@@ -20,6 +20,10 @@ tags_metadata = [
         "name": "RECOMMENDER",
         "description": "Permet d'obtenir quatre types de recommandations, en fonction de l'id du client. Les types de reco : 1. Achetés fréquemment ensemble. 2. Produits similaires. 3. Produits d'utilisateurs similaires. 4. Articles les plus achetés sur le site."
     },
+{
+        "name": "CATEGORY",
+        "description": "Permet d'obtenir le top souhaité dans la cétegorie donnée."
+    },
 ]
 
 app = FastAPI(openapi_tags=tags_metadata)
@@ -137,3 +141,7 @@ def get_customer_details_in_csv(id):
 @app.get("/generate_csv", tags=["RFM"])
 def generate_csv_details():
     return { "data": customer_segmenter.generate_csv_details() }
+
+@app.get("/get_top_categories/{cat}/{num}", tags=["CATEGORY"])
+def get_top_categories(cat, num):
+    return { "data": customer_segmenter.get_top_categories(cat, num) }

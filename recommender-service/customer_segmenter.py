@@ -14,6 +14,7 @@ class CustomerSegmenter:
     data_by_cat = {}
     counts_by_cat = {}
     counts_cat_by_cust = {}
+    top_categories = {}
 
     def __init__(self):
         # self.df = self.get_file_from_url.get_clean_dataframe()
@@ -183,3 +184,11 @@ class CustomerSegmenter:
 
     def get_all_customers(self, search):
         return [customer_id for customer_id in self.customers_id if search in str(customer_id)][:5]
+
+    def get_top_categories(self, cat, num):
+        cat = cat.upper()
+        num = int(num)
+        top_cat = self.df[cat].value_counts(dropna=False)[:num]
+        self.top_categories = top_cat.to_json(orient="index")
+        print(top_cat)
+        return self.top_categories
