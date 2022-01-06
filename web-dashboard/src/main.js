@@ -10,10 +10,10 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { faBoxOpen } from '@fortawesome/free-solid-svg-icons'
+import { faUserAstronaut, faBoxOpen, faCertificate } from '@fortawesome/free-solid-svg-icons'
 
 // Upload FontAwesome Icons
-library.add(faBoxOpen)
+library.add(faUserAstronaut, faBoxOpen, faCertificate)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 

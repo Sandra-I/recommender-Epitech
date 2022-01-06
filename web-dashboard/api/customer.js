@@ -72,7 +72,7 @@ function getLastOrder(customer_id) {
             .then((response) => {
                 let data = {};
                 if (response.status === 200 && response.data) {
-                    data = JSON.parse(response.data.data);
+                    data = Object.values(JSON.parse(response.data.data));
                     resolve(data);
                 }
                 reject(data);
