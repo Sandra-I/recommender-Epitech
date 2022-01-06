@@ -167,7 +167,7 @@ class CustomerSegmenter:
     def get_customer_details_in_csv(self, id):
         df = pd.read_csv('csv_details_by_customer.csv')
         customer = df[df['CLI_ID'] == int(id)]
-        return customer.to_json(orient="index")
+        return customer.to_json(orient="records")
 
     def get_last_order(self, id):
         # Get lasts order for one user
