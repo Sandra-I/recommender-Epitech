@@ -8,6 +8,15 @@ import UserDashboard from './components/UserDashboard.vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { faBoxOpen } from '@fortawesome/free-solid-svg-icons'
+
+// Upload FontAwesome Icons
+library.add(faBoxOpen)
+
+Vue.component('font-awesome-icon', FontAwesomeIcon)
+
 Vue.config.productionTip = false
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)

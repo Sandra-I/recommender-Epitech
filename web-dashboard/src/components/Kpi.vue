@@ -9,8 +9,8 @@
 export default {
   name: 'Kpi',
   props: {
-      'title': String,
-      'value': String
+    'title': String,
+    'value': [String, Number]
   }
 }
 </script>
@@ -33,9 +33,9 @@ export default {
     }
 
     .value {
-        color: #1f43f4;
-        font-weight: 600;
-        margin-top: 0.5rem;
+      color: #1f43f4;
+      font-weight: 600;
+      margin-top: 0.5rem;
     }
 
 }

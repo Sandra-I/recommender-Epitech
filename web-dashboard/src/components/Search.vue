@@ -8,12 +8,13 @@
             </div>
             <input type="text" class="form-control find-user" id="find-user" placeholder="Find an user by id..." v-model="search">
         </div>
-        <Autocomplete v-if="search" v-click-outside="closeAutocomplete" @closeAutocomplete="closeAutocomplete"/>
+        <Autocomplete v-if="customers" :customers="customers" v-click-outside="closeAutocomplete" @closeAutocomplete="closeAutocomplete"/>
     </div>
 </template>
 
 <script>
 import Autocomplete from './Autocomplete.vue'
+import { getAllCustomers } from '../../api/customer.js'
 
 export default {
     name: 'Search',
@@ -21,11 +22,20 @@ export default {
         Autocomplete
     },
     data: () => ({
-        search: ""
+        search: "",
+        customers: []
     }),
     methods: {
         closeAutocomplete() {
             this.search = "";
+        }
+    },
+    watch: {
+        async search(value) {
+            this.customers = [];
+            if (value != "") {
+                this.customers = await getAllCustomers(value);
+            }
         }
     }
 }

@@ -1,16 +1,15 @@
 <template>
-    <ul class="autocomplete">
-        <li @click="onSelectUser(1)">1</li>
-        <li @click="onSelectUser(2)">2</li>
-        <li @click="onSelectUser(3)">3</li>
-        <li @click="onSelectUser(4)">4</li>
-        <li @click="onSelectUser(5)">5</li>
-    </ul>
+    <div v-if="customers.length">
+        <ul class="autocomplete">
+            <li v-for="customer_id in customers" :key="customer_id" @click="onSelectUser(customer_id)">{{ customer_id }}</li>
+        </ul>
+    </div>
 </template>
 
 <script>
 export default {
     name: 'Autocomplete',
+    props: ["customers"],
     methods: {
         onSelectUser(userId) {
             // Prevent redundant navigation
