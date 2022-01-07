@@ -67,9 +67,10 @@ class ItemRecommender:
         closest_product = []
         index = df_close_item.index
         number_of_rows = len(index)
+        if (number_of_rows > 4):
+            number_of_rows = 4
         for j in range (1,number_of_rows):
-
-            closest_product.append(df_close_item[:4]["LIBELLE"].values[j])
+            closest_product.append(df_close_item[:number_of_rows]["LIBELLE"].values[j])
         return closest_product
 
     def get_article_from_similar_client(self, customerId):
@@ -77,9 +78,10 @@ class ItemRecommender:
         similar_users = self.rfm_cli_article_df[(self.rfm_cli_article_df["RFM_SEGMENT"] == user["RFM_SEGMENT"].values[0]) & (self.rfm_cli_article_df["Most_Buyed_Article"] == user["Most_Buyed_Article"].values[0])][:3]
         closest_product = []
         for i in range(1,3):
-            if i in similar_users.index:
-                product_index = self.df_reset_freq[self.df_reset_freq["CLI_ID"] == similar_users.iloc[[i]]["CLI_ID"].values[0]]["Frequence"].nlargest(3).index.values[1]
-                closest_product.append(self.df_reset_freq.loc[[product_index]]["Item"].values[0])
+            same_user = self.df_reset_freq[self.df_reset_freq["CLI_ID"] == similar_users.iloc[[i]]["CLI_ID"].values[0]]
+            second_article = same_user.iloc[[1]]
+            label = second_article["Item"].values[0]
+            closest_product.append(label)
         return closest_product
     
     def get_personnalized_recommendation_for_a_user(self, customerId):
