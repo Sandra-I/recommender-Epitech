@@ -160,3 +160,6 @@ About
 /workspace.xml
 .idea/
 recommender-service/*.pickle
+
+# web app
+web-dashboard/node_modules

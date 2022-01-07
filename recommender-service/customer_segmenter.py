@@ -22,6 +22,7 @@ class CustomerSegmenter:
         # self.df_customer_details = self.get_file_from_google.get_csv_details_by_customer()
         self.df = pd.read_csv('../clean_dataset.csv', parse_dates=True)
         # self.df = self.df.tail(n = 50)
+        self.customers_id = self.get_customers_id()
         print(self.df.head())
 
     def create_customer_clusters(self):
@@ -30,6 +31,10 @@ class CustomerSegmenter:
 
     def get_customer_family(self):
         print('Retourne dataframe customer avec famille')
+
+    def get_customers_id(self):
+        df = pd.read_csv('csv_details_by_customer.csv')
+        return df['CLI_ID'].tolist()
     
     def get_RFM(self):
         monetary_series = self.calculate_monetary()
@@ -161,11 +166,25 @@ class CustomerSegmenter:
         return { 'average_basket': 'client_average' }
     
     def get_customer_details_in_csv(self, id):
-        # df = self.df_customer_details
         df = pd.read_csv('csv_details_by_customer.csv')
         customer = df[df['CLI_ID'] == int(id)]
-        return customer.to_json(orient="index")
+        return customer.to_json(orient="records")
 
+    def get_last_order(self, id):
+        # Get lasts order for one user
+        max = self.df.groupby(['CLI_ID'], sort=False)['MOIS_VENTE'].transform('max')
+        df_purchases = self.df[(self.df['MOIS_VENTE'] == max)]
+
+        # If multiple columns on month, get the order with max ticket_id
+        max = df_purchases.groupby(['TICKET_ID'], sort=False)['TICKET_ID'].transform('max')
+        df_purchases = df_purchases[(df_purchases['TICKET_ID'] == max)]
+        df_purchases = df_purchases[['TICKET_ID','MOIS_VENTE','PRIX_NET','FAMILLE','UNIVERS','MAILLE','LIBELLE','CLI_ID']]
+
+        return df_purchases[df_purchases['CLI_ID'] == int(id)].to_json(orient="index")
+
+    def get_all_customers(self, search):
+        return [customer_id for customer_id in self.customers_id if search in str(customer_id)][:5]
+      
     def get_top_categories(self, cat, num):
         cat = cat.upper()
         num = int(num)
@@ -173,3 +192,9 @@ class CustomerSegmenter:
         self.top_categories = top_cat.to_json(orient="index")
         print(top_cat)
         return self.top_categories
+      
+    def get_customer_evolution(self):
+        return self.df[['MOIS_VENTE','CLI_ID']].groupby(['MOIS_VENTE'])['CLI_ID'].nunique().to_json(orient="records")
+
+    def get_ca_evolution(self):
+        return self.df[['MOIS_VENTE','PRIX_NET']].groupby(['MOIS_VENTE']).sum()['PRIX_NET'].to_json(orient="records")
