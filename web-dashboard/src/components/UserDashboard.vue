@@ -20,7 +20,7 @@
             <Kpi title="Dernier achat" :value="`Il y a ${customerDetails.recency} mois`"/>
           </div>
           <div class="row justify-content-start" v-if="customerDetails.frequency_group">
-              <Kpi title="Catégorie d'acheteur" :value="customerDetails.frequency_group.toLowerCase()"/>
+              <Kpi title="Catégorie d'acheteur" :value="customerDetails.frequency_group"/>
           </div>
         </div>
         <div class="section" v-if="lastOrder">

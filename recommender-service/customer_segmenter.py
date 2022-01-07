@@ -192,3 +192,9 @@ class CustomerSegmenter:
         self.top_categories = top_cat.to_json(orient="index")
         print(top_cat)
         return self.top_categories
+
+    def get_customer_evolution(self):
+        return self.df[['MOIS_VENTE','CLI_ID']].groupby(['MOIS_VENTE'])['CLI_ID'].nunique().to_json(orient="records")
+
+    def get_ca_evolution(self):
+        return self.df[['MOIS_VENTE','PRIX_NET']].groupby(['MOIS_VENTE']).sum()['PRIX_NET'].to_json(orient="records")

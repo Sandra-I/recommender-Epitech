@@ -1,7 +1,7 @@
 <template>
   <div class="kpi">
     <h3 class="title">{{ title }}</h3>
-    <span class="value">{{ value }}</span>
+    <span class="value">{{ getValue(value) }}</span>
   </div>
 </template>
 
@@ -11,6 +11,15 @@ export default {
   props: {
     'title': String,
     'value': [String, Number]
+  },
+  methods: {
+    getValue(value) {
+      if (!Number.isInteger(value)) {
+        const str = value.toLowerCase()
+        return str.charAt(0).toUpperCase() + str.slice(1);
+      }
+      return value;
+    }
   }
 }
 </script>
