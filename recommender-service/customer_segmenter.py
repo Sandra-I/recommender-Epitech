@@ -14,6 +14,7 @@ class CustomerSegmenter:
     data_by_cat = {}
     counts_by_cat = {}
     counts_cat_by_cust = {}
+    top_categories = {}
 
     def __init__(self):
         # self.df = self.get_file_from_url.get_clean_dataframe()
@@ -164,3 +165,11 @@ class CustomerSegmenter:
         df = pd.read_csv('csv_details_by_customer.csv')
         customer = df[df['CLI_ID'] == int(id)]
         return customer.to_json(orient="index")
+
+    def get_top_categories(self, cat, num):
+        cat = cat.upper()
+        num = int(num)
+        top_cat = self.df[cat].value_counts(dropna=False)[:num]
+        self.top_categories = top_cat.to_json(orient="index")
+        print(top_cat)
+        return self.top_categories
