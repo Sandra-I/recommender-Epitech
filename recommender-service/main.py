@@ -7,7 +7,8 @@ from fastapi.middleware.cors import CORSMiddleware
 
 
 origins = [
-    "http://localhost:3000"
+    "http://localhost:3000",
+    "http://localhost:8080"
 ]
 
 tags_metadata = [
@@ -117,9 +118,17 @@ def get_recency_by_customer(id):
 def get_frequency_by_customer(id):
     return { "data": customer_segmenter.get_frequency_by_customer(id) }
 
-@app.get("/customers_details/{id}", tags=["RFM"])
-def get_details_by_customer(id):
-    return { "data": customer_segmenter.get_details_by_customer(id) }
+@app.get("/all_customers/{search}", tags=["RFM"])
+def get_all_customers(search):
+    return { "data": customer_segmenter.get_all_customers(search) }
+
+# @app.get("/customers_details/{id}", tags=["RFM"])
+# def get_details_by_customer(id):
+#     return { "data": customer_segmenter.get_details_by_customer(id) }
+
+@app.get("/last_order/{id}", tags=["RFM"])
+def get_last_order(id):
+    return { "data": customer_segmenter.get_last_order(id) }
 
 @app.get("/customers_details/{id}", tags=["RFM"])
 def get_customer_details_in_csv(id):
