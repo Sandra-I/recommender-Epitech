@@ -46,6 +46,10 @@ async def startup_event():
     customer_segmenter.create_customer_clusters()
     item_recommender.create_unique_item_df()
 
+@app.get("/")
+def welcome():
+    return { "data": "Welcome in our system! What do you want?"}
+
 @app.get("/all_customers/{search}", tags=["RFM"])
 def get_all_customers(search):
     return { "data": customer_segmenter.get_all_customers(search) }
