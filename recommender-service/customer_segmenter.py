@@ -18,7 +18,7 @@ class CustomerSegmenter:
     def __init__(self):
         # DEV to delete or comment for prod
         self.df = pd.read_csv('../clean_dataset.csv', parse_dates=True)
-        self.df_customer_details = pd.read_csv('csv_details_by_customer.csv')
+        self.df_customer_details = pd.read_csv('../csv_details_by_customer.csv')
 
         # PROD to uncomment for production
         # self.df = self.get_file_from_google.get_clean_dataframe()
