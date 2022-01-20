@@ -184,7 +184,7 @@ class CustomerSegmenter:
 
     def get_all_customers(self, search):
         return [customer_id for customer_id in self.customers_id if search in str(customer_id)][:5]
-
+      
     def get_top_categories(self, cat, num):
         cat = cat.upper()
         num = int(num)
@@ -192,7 +192,7 @@ class CustomerSegmenter:
         self.top_categories = top_cat.to_json(orient="index")
         print(top_cat)
         return self.top_categories
-
+      
     def get_customer_evolution(self):
         return self.df[['MOIS_VENTE','CLI_ID']].groupby(['MOIS_VENTE'])['CLI_ID'].nunique().to_json(orient="records")
 

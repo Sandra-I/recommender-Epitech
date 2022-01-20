@@ -22,7 +22,7 @@ tags_metadata = [
     },
 {
         "name": "CATEGORY",
-        "description": "Permet d'obtenir le top souhaité dans la cétegorie donnée."
+        "description": "Permet d'obtenir le top souhaité dans la catégorie donnée."
     },
 ]
 
@@ -74,10 +74,13 @@ def get_most_buyed_product_of_an_user(id):
 def get_all_personalized_recommendation_for_a_user(id):
     return {"data": item_recommender.get_personnalized_recommendation_for_a_user(id)}
 
+<<<<<<< HEAD
 # @app.get("/{cat}", tags=["RFM"])
 # def get_customers_data_by_category(cat):
 #     return { "data": customer_segmenter.get_customers_by_category(cat) }
 
+=======
+>>>>>>> b092082e9c959235bda6804f7a4618f0cc63d0c1
 @app.get("/counts/{cat}", tags=["RFM"])
 def get_counts_by_category(cat):
     return { "data": customer_segmenter.get_counts_by_category(cat) }
