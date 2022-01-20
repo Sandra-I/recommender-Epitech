@@ -67,11 +67,6 @@ def get_top_categories(cat, num):
 def get_all_personalized_recommendation_for_a_user(id):
     return {"data": item_recommender.get_personnalized_recommendation_for_a_user(id)}
 
-# VOIR AVEC LA TEAM
-@app.get("/customers", tags=["RFM"])
-def get_customer_segmentation():
-    return { "data": customer_segmenter.get_customer_RFM() }
-
 # VOIR AVEC TOM
 @app.get("/unrecommendedArticles")
 def get_most_buyed_articles():
@@ -112,6 +107,10 @@ def get_counts_by_category(cat):
 
 # TO HIDE
 # include_in_schema=False : permets de spécifier de ne pas prendre en compte l'endpoint pour la doc
+@app.get("/customers", tags=["RFM"], include_in_schema=False)
+def get_customer_segmentation():
+    return { "data": customer_segmenter.get_customer_RFM() }
+
 @app.get("/customers_details_too_long/{id}", include_in_schema=False)
 def get_details_by_customer(id):
     return { "data": customer_segmenter.get_details_by_customer(id) }
