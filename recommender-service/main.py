@@ -74,9 +74,9 @@ def get_most_buyed_product_of_an_user(id):
 def get_all_personalized_recommendation_for_a_user(id):
     return {"data": item_recommender.get_personnalized_recommendation_for_a_user(id)}
 
-@app.get("/{cat}", tags=["RFM"])
-def get_customers_data_by_category(cat):
-    return { "data": customer_segmenter.get_customers_by_category(cat) }
+# @app.get("/{cat}", tags=["RFM"])
+# def get_customers_data_by_category(cat):
+#     return { "data": customer_segmenter.get_customers_by_category(cat) }
 
 @app.get("/counts/{cat}", tags=["RFM"])
 def get_counts_by_category(cat):
@@ -130,10 +130,6 @@ def get_all_customers(search):
 # def get_details_by_customer(id):
 #     return { "data": customer_segmenter.get_details_by_customer(id) }
 
-@app.get("/last_order/{id}", tags=["RFM"])
-def get_last_order(id):
-    return { "data": customer_segmenter.get_last_order(id) }
-
 @app.get("/customers_details/{id}", tags=["RFM"])
 def get_customer_details_in_csv(id):
     return { "data": customer_segmenter.get_customer_details_in_csv(id) }
@@ -145,3 +141,15 @@ def generate_csv_details():
 @app.get("/get_top_categories/{cat}/{num}", tags=["CATEGORY"])
 def get_top_categories(cat, num):
     return { "data": customer_segmenter.get_top_categories(cat, num) }
+
+@app.get("/last_order/{id}", tags=["SALE"])
+def get_last_order(id):
+    return { "data": customer_segmenter.get_last_order(id) }
+
+@app.get("/customer_evolution", tags=["SALE"])
+def get_customer_evolution():
+    return { "data": customer_segmenter.get_customer_evolution() }
+
+@app.get("/ca_evolution", tags=["SALE"])
+def get_ca_evolution():
+    return { "data": customer_segmenter.get_ca_evolution() }

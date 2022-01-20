@@ -68,8 +68,8 @@ class ItemRecommender:
         index = df_close_item.index
         number_of_rows = len(index)
         for j in range (1,number_of_rows):
-
-            closest_product.append(df_close_item[:4]["LIBELLE"].values[j])
+            if j in df_close_item[:4]["LIBELLE"].values.index:
+                closest_product.append(df_close_item[:4]["LIBELLE"].values[j])
         return closest_product
 
     def get_article_from_similar_client(self, customerId):

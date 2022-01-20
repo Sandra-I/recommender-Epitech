@@ -34,13 +34,13 @@
           <h2>Produits souvent achetés ensemble</h2>
           <Recommendations :recommendations="recommendations.paired_articles"/>
         </div>
-        <div class="section-recommendations" v-if="recommendations && recommendations.similar_product.length">
+        <div class="section-recommendations" v-if="recommendations && recommendations.paired_articles.length">
           <h2>Produits qui pourraient intéresser ce client</h2>
-          <Recommendations :recommendations="recommendations.similar_product"/>
+          <Recommendations :recommendations="recommendations.paired_articles"/>
         </div>
-        <div class="section-recommendations" v-if="recommendations && recommendations.similar_user_product.length">
+        <div class="section-recommendations" v-if="recommendations && recommendations.paired_articles.length">
           <h2>Des utilisateurs similaires ont aussi acheté</h2>
-          <Recommendations :recommendations="recommendations.similar_user_product"/>
+          <Recommendations :recommendations="recommendations.paired_articles"/>
         </div>
     </div>
 </template>
