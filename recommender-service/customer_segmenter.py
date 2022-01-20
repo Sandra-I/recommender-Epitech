@@ -121,8 +121,8 @@ class CustomerSegmenter:
         freq_group_series = self.calculate_frequency_group()
         freq_counts = freq_group_series.value_counts()
         freq_percent_counts = freq_group_series.value_counts(normalize=True)
-        data = { 'recency_counts': freq_counts, 'recency_percent_counts': freq_percent_counts }
-        data_frame = pd.DataFrame(data=data, index=data['recency_counts'].index)
+        data = { 'frequency_counts': freq_counts, 'frequency_percent_counts': freq_percent_counts }
+        data_frame = pd.DataFrame(data=data, index=data['frequency_counts'].index)
         return data_frame.to_json(orient="index")
 
     def get_frequency_group_by_customer(self, id):
@@ -157,12 +157,23 @@ class CustomerSegmenter:
         all_frequencies_series = self.calculate_frequency()
         all_freq_group_series = self.calculate_frequency_group()
         all_recency_series = self.calculate_recency()
-        all_recency_group_series = self.calculate_recency_group()   
+        all_recency_group_series = self.calculate_recency_group()
         df_stitched = pd.concat([all_average_series, all_frequencies_series, all_freq_group_series, all_recency_series, all_recency_group_series], axis=1)
         df_stitched.columns = ['average', 'frequency', 'frequency_group', 'recency', 'recency_group']
         df_stitched.to_csv('csv_details_by_customer.csv')
         return { 'average_basket': 'client_average' }
-    
+
+    def generate_csv_global(self):
+        global_basket = pd.Series(self.get_average_basket())
+        global_recency = pd.Series(self.get_recency_group())
+        global_freq_group = pd.Series(self.get_frequency_group_repartition())
+        global_mean_freq = pd.Series(self.get_mean_frequency())
+        df_stitched = pd.concat([global_basket, global_recency, global_freq_group, global_mean_freq], axis=1)
+        df_stitched.columns = ['basket', 'recency', 'freq_group', 'mean_freq']
+        df_stitched.to_csv('csv_global_metrics.csv')
+        print(df_stitched)
+        return { 'global_metrics': df_stitched }
+
     def get_customer_details_in_csv(self, id):
         df = self.df_customer_details
         customer = df[df['CLI_ID'] == int(id)]
