@@ -3,6 +3,10 @@ RFM_data.csv
 RFM.csv
 KaDo.csv
 csv_details_by_customer.csv
+best_item_by_cli.csv
+cli_article_rfm_segment.csv
+frequence_item.csv
+paired_item.csv
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
