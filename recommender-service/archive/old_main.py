@@ -138,7 +138,7 @@ def get_last_order(id):
 def get_customer_details_in_csv(id):
     return { "data": customer_segmenter.get_customer_details_in_csv(id) }
 
-@app.get("/generate_csv", tags=["RFM"])
+@app.get("/generate_csv_customer_details", tags=["RFM"])
 def generate_csv_details():
     return { "data": customer_segmenter.generate_csv_details() }
 
