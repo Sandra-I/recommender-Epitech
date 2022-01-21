@@ -2,22 +2,31 @@ import pandas as pd
 from itertools import permutations
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np 
+# PROD to uncomment for production
 from google_api.get_file_from_google import GetFileFromGoogleDrive
 class ItemRecommender:
-    
+    # PROD to uncomment for production
+    get_file_from_google = GetFileFromGoogleDrive()
     df = pd.DataFrame()
     df_best_item_by_cli = pd.DataFrame()
     df_unique_item = pd.DataFrame()
     pair_counts_df_sorted = pd.DataFrame()
     rfm_cli_article_df = pd.DataFrame()
     df_reset_freq = pd.DataFrame()
-    get_file_from_google = GetFileFromGoogleDrive()
 
     most_buyed_articles = {}
     most_buyed_articles_among_users = {}
     unpersonnalized_recommended_items = []
 
     def __init__(self):
+        # DEV to delete or comment for prod
+        # self.df = pd.read_csv('../clean_dataset.csv', parse_dates=True)
+        # self.df_best_item_by_cli = pd.read_csv('../best_item_by_cli.csv', parse_dates=True)
+        # self.pair_counts_df_sorted = pd.read_csv('../paired_item.csv', parse_dates=True)
+        # self.df_reset_freq = pd.read_csv('../frequence_item.csv', parse_dates=True)
+        # self.rfm_cli_article_df = pd.read_csv('../cli_article_rfm_segment.csv', parse_dates=True)
+
+        # PROD to uncomment for production
         self.df = self.get_file_from_google.get_clean_dataframe() 
         self.df_best_item_by_cli = self.get_file_from_google.get_best_item_by_cli_dataframe()
         self.pair_counts_df_sorted = self.get_file_from_google.get_paired_item_dataframe()
