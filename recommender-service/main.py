@@ -41,7 +41,6 @@ app.add_middleware(
 customer_segmenter = CustomerSegmenter()
 item_recommender = ItemRecommender()
 
-
 @app.on_event("startup")
 async def startup_event():
     customer_segmenter.create_customer_clusters()
@@ -49,7 +48,7 @@ async def startup_event():
 
 @app.get("/")
 def welcome():
-    return { "data": "Welcome in our system! What do you want?"}
+    return { "data": "Welcome in our system! What do you want?" }
 
 @app.get("/all_customers/{search}", tags=["RFM"])
 def get_all_customers(search):
@@ -70,23 +69,6 @@ def get_top_categories(cat, num):
 @app.get("/all/{id}", tags=["RECOMMENDER"])
 def get_all_personalized_recommendation_for_a_user(id):
     return {"data": item_recommender.get_personnalized_recommendation_for_a_user(id)}
-
-# VOIR AVEC TOM
-@app.get("/unrecommendedArticles")
-def get_most_buyed_articles():
-    return { "data": item_recommender.get_unpersonalized_recommendation(10)}
-@app.get("/pairedArticles/{id}")
-def get_paired_articles(id):
-    return {"data": item_recommender.get_often_buy_together_articles(id)}
-@app.get("/closestArticle/{id}")
-def get_closest_article(id):
-    return {"data": item_recommender.get_closest_product_by_customer(id)}
-@app.get("/neighborMostBuyedArticle/{id}")
-def get_article_from_closest_customer(id):
-    return {"data": item_recommender.get_article_from_similar_client(id)}
-@app.get("/most_buyed_product_of_an_user/{id}", tags=["RECOMMENDER"])
-def get_most_buyed_product_of_an_user(id):
-    return {"data": item_recommender.get_user_most_buyed_articles(id)}
 
 # TO HIDE
 # include_in_schema=False : permets de spécifier de ne pas prendre en compte l'endpoint pour la doc
@@ -145,3 +127,23 @@ def get_counts_by_category(cat):
 @app.get("/counts_by_customer/{cat}", tags=["RFM"], include_in_schema=False)
 def get_counts_by_category(cat):
     return { "data": customer_segmenter.get_counts_category_by_customer(cat) }
+
+@app.get("/unrecommendedArticles", include_in_schema=False)
+def get_most_buyed_articles():
+    return { "data": item_recommender.get_unpersonalized_recommendation(10)}
+
+@app.get("/pairedArticles/{id}", include_in_schema=False)
+def get_paired_articles(id):
+    return {"data": item_recommender.get_often_buy_together_articles(id)}
+
+@app.get("/closestArticle/{id}", include_in_schema=False)
+def get_closest_article(id):
+    return {"data": item_recommender.get_closest_product_by_customer(id)}
+
+@app.get("/neighborMostBuyedArticle/{id}", include_in_schema=False)
+def get_article_from_closest_customer(id):
+    return {"data": item_recommender.get_article_from_similar_client(id)}
+
+@app.get("/most_buyed_product_of_an_user/{id}", tags=["RECOMMENDER"], include_in_schema=False)
+def get_most_buyed_product_of_an_user(id):
+    return {"data": item_recommender.get_user_most_buyed_articles(id)}
