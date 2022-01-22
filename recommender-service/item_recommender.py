@@ -19,13 +19,6 @@ class ItemRecommender:
     unpersonnalized_recommended_items = []
 
     def __init__(self):
-        # DEV to delete or comment for prod
-        # self.df = pd.read_csv('../clean_dataset.csv', parse_dates=True)
-        # self.df_best_item_by_cli = pd.read_csv('../best_item_by_cli.csv', parse_dates=True)
-        # self.pair_counts_df_sorted = pd.read_csv('../paired_item.csv', parse_dates=True)
-        # self.df_reset_freq = pd.read_csv('../frequence_item.csv', parse_dates=True)
-        # self.rfm_cli_article_df = pd.read_csv('../cli_article_rfm_segment.csv', parse_dates=True)
-
         # PROD to uncomment for production
         self.df = self.get_file_from_google.get_clean_dataframe() 
         self.df_best_item_by_cli = self.get_file_from_google.get_best_item_by_cli_dataframe()
@@ -88,6 +81,8 @@ class ItemRecommender:
         closest_product = []
         for i in range(1,3):
             same_user = self.df_reset_freq[self.df_reset_freq["CLI_ID"] == similar_users.iloc[[i]]["CLI_ID"].values[0]]
+            if(len(same_user.index) == 1):
+                return None            
             second_article = same_user.iloc[[1]]
             label = second_article["Item"].values[0]
             closest_product.append(label)

@@ -128,7 +128,7 @@ def get_counts_by_category(cat):
 def get_counts_by_category(cat):
     return { "data": customer_segmenter.get_counts_category_by_customer(cat) }
 
-@app.get("/unrecommendedArticles", include_in_schema=False)
+@app.get("/unrecommendedArticles", tags=["RECOMMENDER"])
 def get_most_buyed_articles():
     return { "data": item_recommender.get_unpersonalized_recommendation(10)}
 
