@@ -75,6 +75,10 @@ def get_all_personalized_recommendation_for_a_user(id):
 @app.get("/customers", tags=["RFM"], include_in_schema=False)
 def get_customer_segmentation():
     return { "data": customer_segmenter.get_customer_RFM() }
+  
+@app.get("/counts/{cat}", tags=["RFM"])
+def get_counts_by_category(cat):
+    return { "data": customer_segmenter.get_counts_by_category(cat) }
 
 @app.get("/customers_details_too_long/{id}", include_in_schema=False)
 def get_details_by_customer(id):
@@ -147,3 +151,19 @@ def get_article_from_closest_customer(id):
 @app.get("/most_buyed_product_of_an_user/{id}", tags=["RECOMMENDER"], include_in_schema=False)
 def get_most_buyed_product_of_an_user(id):
     return {"data": item_recommender.get_user_most_buyed_articles(id)}
+
+@app.get("/get_top_categories/{cat}/{num}", tags=["CATEGORY"])
+def get_top_categories(cat, num):
+    return { "data": customer_segmenter.get_top_categories(cat, num) }
+
+@app.get("/last_order/{id}", tags=["SALE"])
+def get_last_order(id):
+    return { "data": customer_segmenter.get_last_order(id) }
+
+@app.get("/customer_evolution", tags=["SALE"])
+def get_customer_evolution():
+    return { "data": customer_segmenter.get_customer_evolution() }
+
+@app.get("/ca_evolution", tags=["SALE"])
+def get_ca_evolution():
+    return { "data": customer_segmenter.get_ca_evolution() }
