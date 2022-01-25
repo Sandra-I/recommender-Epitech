@@ -1,14 +1,13 @@
 import pandas as pd
-# from get_file_from_url import GetFileFromUrl
-# from google_api.get_file_from_google import GetFileFromGoogleDrive
+# PROD to uncomment for production
+from google_api.get_file_from_google import GetFileFromGoogleDrive
 
 class CustomerSegmenter:
-
-    # get_file_from_url = GetFileFromUrl()
-    # get_file_from_google = GetFileFromGoogleDrive()
+    # PROD to uncomment for production
+    get_file_from_google = GetFileFromGoogleDrive()
     customer_cluster_result = 0
     df = pd.DataFrame()
-    df_cutomer_details = pd.DataFrame()
+    df_customer_details = pd.DataFrame()
     customer_rfm = {}
     customer_family = {}
     data_by_cat = {}
@@ -17,11 +16,14 @@ class CustomerSegmenter:
     top_categories = {}
 
     def __init__(self):
-        # self.df = self.get_file_from_url.get_clean_dataframe()
-        # self.df = self.get_file_from_google.get_clean_dataframe()
-        # self.df_customer_details = self.get_file_from_google.get_csv_details_by_customer()
-        self.df = pd.read_csv('../clean_dataset.csv', parse_dates=True)
-        # self.df = self.df.tail(n = 50)
+        # DEV to delete or comment for prod
+        # self.df = pd.read_csv('../clean_dataset.csv', parse_dates=True)
+        # self.df_customer_details = pd.read_csv('../csv_details_by_customer.csv')
+
+        # PROD to uncomment for production
+        self.df = self.get_file_from_google.get_clean_dataframe()
+        self.df_customer_details = self.get_file_from_google.get_csv_details_by_customer()
+
         self.customers_id = self.get_customers_id()
         print(self.df.head())
 
@@ -29,12 +31,8 @@ class CustomerSegmenter:
         rfm_df = self.get_RFM()
         self.customer_rfm = rfm_df.to_json(orient="index")
 
-    def get_customer_family(self):
-        print('Retourne dataframe customer avec famille')
-
     def get_customers_id(self):
-        df = pd.read_csv('csv_details_by_customer.csv')
-        return df['CLI_ID'].tolist()
+        return self.df_customer_details['CLI_ID'].tolist()
     
     def get_RFM(self):
         monetary_series = self.calculate_monetary()
@@ -166,7 +164,7 @@ class CustomerSegmenter:
         return { 'average_basket': 'client_average' }
     
     def get_customer_details_in_csv(self, id):
-        df = pd.read_csv('csv_details_by_customer.csv')
+        df = self.df_customer_details
         customer = df[df['CLI_ID'] == int(id)]
         return customer.to_json(orient="records")
 

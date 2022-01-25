@@ -2,22 +2,24 @@ import pandas as pd
 from itertools import permutations
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np 
+# PROD to uncomment for production
 from google_api.get_file_from_google import GetFileFromGoogleDrive
 class ItemRecommender:
-    
+    # PROD to uncomment for production
+    get_file_from_google = GetFileFromGoogleDrive()
     df = pd.DataFrame()
     df_best_item_by_cli = pd.DataFrame()
     df_unique_item = pd.DataFrame()
     pair_counts_df_sorted = pd.DataFrame()
     rfm_cli_article_df = pd.DataFrame()
     df_reset_freq = pd.DataFrame()
-    get_file_from_google = GetFileFromGoogleDrive()
 
     most_buyed_articles = {}
     most_buyed_articles_among_users = {}
     unpersonnalized_recommended_items = []
 
     def __init__(self):
+        # PROD to uncomment for production
         self.df = self.get_file_from_google.get_clean_dataframe() 
         self.df_best_item_by_cli = self.get_file_from_google.get_best_item_by_cli_dataframe()
         self.pair_counts_df_sorted = self.get_file_from_google.get_paired_item_dataframe()
@@ -67,9 +69,10 @@ class ItemRecommender:
         closest_product = []
         index = df_close_item.index
         number_of_rows = len(index)
+        if (number_of_rows > 4):
+            number_of_rows = 4
         for j in range (1,number_of_rows):
-            if j in df_close_item[:4]["LIBELLE"].values.index:
-                closest_product.append(df_close_item[:4]["LIBELLE"].values[j])
+            closest_product.append(df_close_item[:number_of_rows]["LIBELLE"].values[j])
         return closest_product
 
     def get_article_from_similar_client(self, customerId):
@@ -77,9 +80,12 @@ class ItemRecommender:
         similar_users = self.rfm_cli_article_df[(self.rfm_cli_article_df["RFM_SEGMENT"] == user["RFM_SEGMENT"].values[0]) & (self.rfm_cli_article_df["Most_Buyed_Article"] == user["Most_Buyed_Article"].values[0])][:3]
         closest_product = []
         for i in range(1,3):
-            if i in similar_users.index:
-                product_index = self.df_reset_freq[self.df_reset_freq["CLI_ID"] == similar_users.iloc[[i]]["CLI_ID"].values[0]]["Frequence"].nlargest(3).index.values[1]
-                closest_product.append(self.df_reset_freq.loc[[product_index]]["Item"].values[0])
+            same_user = self.df_reset_freq[self.df_reset_freq["CLI_ID"] == similar_users.iloc[[i]]["CLI_ID"].values[0]]
+            if(len(same_user.index) == 1):
+                return None            
+            second_article = same_user.iloc[[1]]
+            label = second_article["Item"].values[0]
+            closest_product.append(label)
         return closest_product
     
     def get_personnalized_recommendation_for_a_user(self, customerId):

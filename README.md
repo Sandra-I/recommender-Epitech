@@ -1,15 +1,11 @@
 # Recommender_2021_31
 
-### API
+## API
 
-Installer toutes les dépendances nécessaires à l'utilisation de l'API
+Installer toutes les dépendances nécessaires à l'utilisation de l'API, depuis le dossier recommender-service/ :
 
 ```
-$ pip install anyio asgiref click colorama fastapi h11 idna joblib nltk numpy pandas pycodestyle pydantic python-dateutil pytz regex six sniffio starlette toml tqdm typing-extensions uvicorn watchgod websockets google-auth-oauthlib google-api-python-client
-```
-
-`̀``
-$ pip install -U scikit-learn
+$ pip install -r requirements.txt
 ```
 
 Pour lancer le serveur FastAPI, depuis le dossier recommender-service/ :
@@ -20,7 +16,9 @@ $ uvicorn main:app --reload
 
 Consulter l'API Swagger http://localhost:8000/docs
 
-### Web App
+***
+***
+## Web App
 
 Installer les dépendances nécessaires pour l'application web, depuis le dossier web-dashboard/ :
 
