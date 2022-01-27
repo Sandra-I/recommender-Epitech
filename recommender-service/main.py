@@ -156,6 +156,10 @@ def get_most_buyed_product_of_an_user(id):
 def generate_csv_global():
     return { "data": customer_segmenter.generate_csv_global() }
 
+@app.get("/global_metrics", tags=["RFM"])
+def get_global_metrics():
+    return { "data": customer_segmenter.get_global_metrics_csv() }
+
 @app.get("/get_top_categories/{cat}/{num}", tags=["CATEGORY"])
 def get_top_categories(cat, num):
     return { "data": customer_segmenter.get_top_categories(cat, num) }

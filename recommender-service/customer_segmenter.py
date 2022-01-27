@@ -8,6 +8,7 @@ class CustomerSegmenter:
     customer_cluster_result = 0
     df = pd.DataFrame()
     df_customer_details = pd.DataFrame()
+    df_global_metrics = pd.DataFrame()
     customer_rfm = {}
     customer_family = {}
     data_by_cat = {}
@@ -19,6 +20,7 @@ class CustomerSegmenter:
         # DEV to delete or comment for prod
         # self.df = pd.read_csv('../clean_dataset.csv', parse_dates=True)
         # self.df_customer_details = pd.read_csv('../csv_details_by_customer.csv')
+        # self.df_global_metrics = pd.read_csv('../csv_global_metrics.csv')
 
         # PROD to uncomment for production
         self.df = self.get_file_from_google.get_clean_dataframe()
@@ -98,8 +100,8 @@ class CustomerSegmenter:
         recency_group_series = self.calculate_recency_group()
         recency_counts = recency_group_series.value_counts()
         recency_percent_counts = recency_group_series.value_counts(normalize=True)
-        data = { 'recency_counts': recency_counts, 'recency_percent_counts': recency_percent_counts }
-        data_frame = pd.DataFrame(data=data, index=data['recency_counts'].index)
+        data = { 'recency_counts': recency_counts, 'recency_percent': recency_percent_counts }
+        data_frame = pd.DataFrame(data=data)
         return data_frame.to_json(orient="index")
 
     def get_recency_group_by_customer(self, id):
@@ -121,7 +123,7 @@ class CustomerSegmenter:
         freq_group_series = self.calculate_frequency_group()
         freq_counts = freq_group_series.value_counts()
         freq_percent_counts = freq_group_series.value_counts(normalize=True)
-        data = { 'frequency_counts': freq_counts, 'frequency_percent_counts': freq_percent_counts }
+        data = { 'frequency_counts': freq_counts, 'frequency_percent': freq_percent_counts }
         data_frame = pd.DataFrame(data=data, index=data['frequency_counts'].index)
         return data_frame.to_json(orient="index")
 
@@ -169,8 +171,8 @@ class CustomerSegmenter:
         global_freq_group = pd.Series(self.get_frequency_group_repartition())
         global_mean_freq = pd.Series(self.get_mean_frequency())
         df_stitched = pd.concat([global_basket, global_recency, global_freq_group, global_mean_freq], axis=1)
-        df_stitched.columns = ['basket', 'recency', 'freq_group', 'mean_freq']
-        df_stitched.to_csv('csv_global_metrics.csv')
+        df_stitched.columns = ['basket', 'recency', 'frequency_group', 'mean_frequency']
+        df_stitched.to_csv('../csv_global_metrics.csv')
         print(df_stitched)
         return { 'global_metrics': df_stitched }
 
@@ -178,6 +180,10 @@ class CustomerSegmenter:
         df = self.df_customer_details
         customer = df[df['CLI_ID'] == int(id)]
         return customer.to_json(orient="records")
+
+    def get_global_metrics_csv(self):
+        metrics = self.df_global_metrics
+        return metrics.to_json(orient="records")
 
     def get_last_order(self, id):
         # Get lasts order for one user
