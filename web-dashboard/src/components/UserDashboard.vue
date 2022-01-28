@@ -26,21 +26,21 @@
         <div class="section" v-if="lastOrder">
           <LastOrder :lastOrder="lastOrder"/>
         </div>
-        <div class="section-recommendations" v-if="recommendations && recommendations.most_buyed_article.length">
+        <div class="section-recommendations" v-if="recommendations && recommendations.most_buyed_article && recommendations.most_buyed_article.length">
           <h2>Produit le plus acheté sur le site</h2>
           <Recommendations :recommendations="[recommendations.most_buyed_article]"/>
         </div>
-        <div class="section-recommendations" v-if="recommendations && recommendations.paired_articles.length">
+        <div class="section-recommendations" v-if="recommendations && recommendations.paired_articles && recommendations.paired_articles.length">
           <h2>Produits souvent achetés ensemble</h2>
           <Recommendations :recommendations="recommendations.paired_articles"/>
         </div>
-        <div class="section-recommendations" v-if="recommendations && recommendations.paired_articles.length">
+        <div class="section-recommendations" v-if="recommendations && recommendations.similar_product && recommendations.similar_product.length">
           <h2>Produits qui pourraient intéresser ce client</h2>
-          <Recommendations :recommendations="recommendations.paired_articles"/>
+          <Recommendations :recommendations="recommendations.similar_product"/>
         </div>
-        <div class="section-recommendations" v-if="recommendations && recommendations.paired_articles.length">
+        <div class="section-recommendations" v-if="recommendations && recommendations.similar_user_product && recommendations.similar_user_product.length">
           <h2>Des utilisateurs similaires ont aussi acheté</h2>
-          <Recommendations :recommendations="recommendations.paired_articles"/>
+          <Recommendations :recommendations="recommendations.similar_user_product"/>
         </div>
     </div>
 </template>
@@ -65,13 +65,20 @@ export default {
     grade : ""
   }),
   mounted: async function () {
-    const customer_id = this.$route.params.id;
-    this.customerDetails = await getCustomerDetails(customer_id);
-    this.recommendations = await getRecommendations(customer_id);
-    this.lastOrder = await getLastOrder(customer_id);
-    this.setGrade();
+    await this.loadData(this.$route.params.id);
+  },
+  watch: {
+    '$route.params.id': async function (customerId) {
+      await this.loadData(customerId);
+    }
   },
   methods: {
+    async loadData(customerId) {
+      this.customerDetails = await getCustomerDetails(customerId);
+      this.recommendations = await getRecommendations(customerId);
+      this.lastOrder = await getLastOrder(customerId);
+      this.setGrade();
+    },
     formatPrice(price) {
       if (price) return `${this.formatNumber(price.toFixed(2))} €`;
     },
@@ -80,7 +87,6 @@ export default {
     },
     setGrade() {
       if (this.customerDetails) {
-        console.log("ok")
         switch (this.customerDetails.Cluster) {
           case 0:
             this.grade = "bronze";

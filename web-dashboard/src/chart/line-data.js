@@ -43,7 +43,10 @@ function generateLineData(labels, dataset) {
 }
 
 function numberWithSpaces(x) {
-  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+  if (x > 1000) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+  }
+  return x;
 }
 
 export default generateLineData;

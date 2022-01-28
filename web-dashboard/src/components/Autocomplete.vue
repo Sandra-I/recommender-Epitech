@@ -32,6 +32,7 @@ export default {
     box-shadow: 0 0.75rem 1.875rem 0 rgb(90 97 105 / 5%);
     border-top: 1px solid #f7f7f7;
     padding: 1rem;
+    z-index: 1;
     cursor: pointer;
 
     li {

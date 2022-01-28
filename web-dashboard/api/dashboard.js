@@ -2,6 +2,27 @@ import axios from "axios"
 
 const URL_API = "http://127.0.0.1:8000";
 
+function getGlobalMetrics() {
+    return new Promise((resolve, reject) => {
+        const url = `${URL_API}/global_metrics`;
+        axios.get(url)
+            .then((response) => {
+                let data = {};
+                if (response.status === 200 && response.data) {
+                    data = JSON.parse(response.data.data);
+                    resolve(data[0]);
+                }
+                reject(data);
+            })
+            .catch((error) => {
+                if (error.response && error.response.status === 404) {
+                    reject({status: 404, message: "Data not found !"});
+                }
+                reject(error);
+            })
+    });
+}
+
 function getTopBy(category) {
     return new Promise((resolve, reject) => {
         const url = `${URL_API}/get_top_categories/${category}/3`;
@@ -65,4 +86,4 @@ function getCAEvolution() {
     });
 }
 
-export { getTopBy, getCustomerEvolution, getCAEvolution }
+export { getGlobalMetrics, getTopBy, getCustomerEvolution, getCAEvolution }
