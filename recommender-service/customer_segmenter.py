@@ -1,9 +1,7 @@
 import pandas as pd
-# PROD to uncomment for production
 from google_api.get_file_from_google import GetFileFromGoogleDrive
 
 class CustomerSegmenter:
-    # PROD to uncomment for production
     get_file_from_google = GetFileFromGoogleDrive()
     customer_cluster_result = 0
     df = pd.DataFrame()
@@ -17,15 +15,9 @@ class CustomerSegmenter:
     top_categories = {}
 
     def __init__(self):
-        # DEV to delete or comment for prod
-        # self.df = pd.read_csv('../clean_dataset.csv', parse_dates=True)
-        # self.df_customer_details = pd.read_csv('../csv_details_by_customer.csv')
-        self.df_global_metrics = pd.read_csv('../csv_global_metrics.csv')
-
-        # PROD to uncomment for production
         self.df = self.get_file_from_google.get_clean_dataframe()
         self.df_customer_details = self.get_file_from_google.get_csv_details_by_customer()
-
+        self.df_global_metrics = self.get_file_from_google.get_csv_global_metrics()
         self.customers_id = self.get_customers_id()
         print(self.df.head())
 

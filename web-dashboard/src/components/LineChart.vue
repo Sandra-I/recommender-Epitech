@@ -22,7 +22,7 @@ export default {
     getDataset() {
       return [
         {
-          label: "Chiffre d'affaire",
+          label: "Chiffre d'affaires",
           data: this.data.ca,
           fill: false,
           borderColor: "#1f43f4",

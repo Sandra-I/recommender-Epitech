@@ -7,6 +7,7 @@ best_item_by_cli.csv
 cli_article_rfm_segment.csv
 frequence_item.csv
 paired_item.csv
+csv_global_metrics.csv
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

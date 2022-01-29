@@ -9,7 +9,7 @@ from fastapi.middleware.cors import CORSMiddleware
 origins = [
     "http://localhost:3000",
     "http://localhost:8080",
-    "https://recommender-31.herokuapp.com"
+    "https://the-recommender-31.netlify.app"
 ]
 
 tags_metadata = [
@@ -69,6 +69,18 @@ def get_top_categories(cat, num):
 @app.get("/all/{id}", tags=["RECOMMENDER"])
 def get_all_personalized_recommendation_for_a_user(id):
     return {"data": item_recommender.get_personnalized_recommendation_for_a_user(id)}
+
+@app.get("/global_metrics", tags=["RFM"])
+def get_global_metrics():
+    return { "data": customer_segmenter.get_global_metrics_csv() }
+
+@app.get("/customer_evolution", tags=["SALE"])
+def get_customer_evolution():
+    return { "data": customer_segmenter.get_customer_evolution() }
+
+@app.get("/ca_evolution", tags=["SALE"])
+def get_ca_evolution():
+    return { "data": customer_segmenter.get_ca_evolution() }
 
 # TO HIDE
 # include_in_schema=False : permets de spécifier de ne pas prendre en compte l'endpoint pour la doc
@@ -152,26 +164,6 @@ def get_article_from_closest_customer(id):
 def get_most_buyed_product_of_an_user(id):
     return {"data": item_recommender.get_user_most_buyed_articles(id)}
 
-@app.get("/generate_csv_global", tags=["RFM"])
+@app.get("/generate_csv_global", tags=["RFM"], include_in_schema=False)
 def generate_csv_global():
     return { "data": customer_segmenter.generate_csv_global() }
-
-@app.get("/global_metrics", tags=["RFM"])
-def get_global_metrics():
-    return { "data": customer_segmenter.get_global_metrics_csv() }
-
-@app.get("/get_top_categories/{cat}/{num}", tags=["CATEGORY"])
-def get_top_categories(cat, num):
-    return { "data": customer_segmenter.get_top_categories(cat, num) }
-
-@app.get("/last_order/{id}", tags=["SALE"])
-def get_last_order(id):
-    return { "data": customer_segmenter.get_last_order(id) }
-
-@app.get("/customer_evolution", tags=["SALE"])
-def get_customer_evolution():
-    return { "data": customer_segmenter.get_customer_evolution() }
-
-@app.get("/ca_evolution", tags=["SALE"])
-def get_ca_evolution():
-    return { "data": customer_segmenter.get_ca_evolution() }
