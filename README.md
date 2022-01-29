@@ -18,8 +18,18 @@ Consulter l'API Swagger http://localhost:8000/docs
 
 ***
 ***
-## Web App
+<br>
 
+## WEB APP
+<br>
+
+### EN LIGNE
+
+Accéder à l'interface web depuis l'adresse https://the-recommender-31.netlify.app/ 
+
+<br>
+
+### EN LOCAL
 Installer les dépendances nécessaires pour l'application web, depuis le dossier web-dashboard/ :
 
 ```
@@ -36,6 +46,8 @@ Accéder à l'interface web depuis l'adresse http://localhost:8080/
 
 ***
 ***
-## Documentation
+<br>
+
+## DOCUMENTATION
 
 Pour accèder au wiki du projet suivre ce lien: https://github.com/EpitechMscPro2020/recommender_2022_31/wiki/Protocole-exp%C3%A9rimentale
