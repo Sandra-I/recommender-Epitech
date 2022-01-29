@@ -8,7 +8,8 @@ from fastapi.middleware.cors import CORSMiddleware
 
 origins = [
     "http://localhost:3000",
-    "http://localhost:8080"
+    "http://localhost:8080",
+    "https://the-recommender-31.netlify.app"
 ]
 
 tags_metadata = [
