@@ -34,7 +34,7 @@ class GetFileFromGoogleDrive:
                 status, done = downloader.next_chunk()
                 print('Download file {0}'.format(status.progress() * 100))
 
-            print('Downloading end')
+            print('Downloading file end')
 
             fh.seek(0)
 
@@ -58,6 +58,8 @@ class GetFileFromGoogleDrive:
 
             elif file_id == '1goMTA8ZbDdvdwGIC98LGwxheqTVri5yq':
                 self.csv_global_metrics = pd.read_csv(fh)
+
+        print('End of Download')
 
     def get_clean_dataframe(self):
         return self.clean_dataset
