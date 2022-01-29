@@ -3,13 +3,13 @@
         <div class="section row justify-content-around" v-if="dataLoaded && globalMetrics">
             <Kpi title="Panier moyen" :value="globalMetrics.basket" sufix="€"/>
             <Kpi title="Nombre total de client" :value="globalMetrics.totalCustomers"/>
-            <Kpi title="Chiffre d'affaire total" :value="globalMetrics.totalCa" sufix="€"/>
+            <Kpi title="Chiffre d'affaires total" :value="globalMetrics.totalCa" sufix="€"/>
         </div>
         <div class="section row">
             <div class="col-4 chart" v-if="dataLoaded">
                 <div class="card">
                 <div class="card-header">
-                    <h3>Univers les plus vendues</h3>
+                    <h3>Univers les plus vendus</h3>
                 </div>
                 <div class="card-body">
                     <PieChart slug="univers" :data="topCategories.univers" type="doughnut" legend="Nombre de ventes"/>
@@ -63,7 +63,7 @@
             <div class="col-12 chart">
                 <div class="card">
                 <div class="card-header">
-                    <h3>Evolution du chiffre d'affaire par rapport au nombre de client</h3>
+                    <h3>Evolution du chiffre d'affaires par rapport au nombre de client</h3>
                 </div>
                 <div class="card-body">
                     <BarChart :data="saleEvolution"/>
