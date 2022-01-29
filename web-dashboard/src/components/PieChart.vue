@@ -10,21 +10,22 @@ import generatePieData from '../chart/pie-data.js'
 
 export default {
   name: 'PieChart',
-  props: ['data','slug'],
+  props: ['data','slug','type','legend'],
   mounted() {
     const ctx = document.getElementById(`pie-chart-${this.slug}`);
     const labels = this.getLabels();
     const dataset = this.getDataset();
-    const pieData = generatePieData(labels, dataset);
+    const pieData = generatePieData(labels, dataset, this.type, this.legend);
     new Chart(ctx, pieData);
   },
   methods: {
     getDataset() {
+      const colors = ["#1f43f4", "#d7ddfd", "#e0e0e0"];
       return [
         {
           label: "Clients",
           data: Object.values(this.data),
-          backgroundColor: ["#d7ddfd", "#e0e0e0", "#1f43f4"],
+          backgroundColor: colors.slice(this.data.length),
         }
       ];
     },

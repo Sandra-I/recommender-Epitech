@@ -1,7 +1,7 @@
 <template>
   <div class="kpi">
     <h3 class="title">{{ title }}</h3>
-    <span class="value">{{ getValue(value) }}</span>
+    <span class="value">{{ getValue(value) }} {{ sufix }}</span>
   </div>
 </template>
 
@@ -10,15 +10,31 @@ export default {
   name: 'Kpi',
   props: {
     'title': String,
-    'value': [String, Number]
+    'value': [String, Number],
+    'sufix': {
+      type: String,
+      default: ''
+    }
   },
   methods: {
     getValue(value) {
-      if (!Number.isInteger(value)) {
-        const str = value.toLowerCase()
+      if (!value) {
+        return '';
+      }
+      if (isNaN(value)) {
+        const str = value.toLowerCase();
         return str.charAt(0).toUpperCase() + str.slice(1);
       }
-      return value;
+      if (value % 1 === 0) {
+        if (value > 1000) {
+          return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+        }
+        return value;
+      }
+      if (value > 1000) {
+        return value.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+      }
+      return value.toFixed(2);
     }
   }
 }

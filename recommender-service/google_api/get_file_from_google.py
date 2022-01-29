@@ -11,10 +11,10 @@ class GetFileFromGoogleDrive:
 
     service = Create_Service(CLIENT_SECRET_FILE, API_NAME, API_VERSION, SCOPES)
 
-    file_ids = ['1YzBXfLqRCm5yAs48mgmPIemhlUaV0jNJ', '1WM9kvmlOhzuyepk77R7k0UM2-PAngkQ0', '1J1zoy6uPfCciaQH0WLMhMeC-b3SDV80m', '1PAy6z1PHJMCaAmWGmQXqf25epPAdplgn', '1UP8JwG0v9Nv6nUAYfc4kowbHeJ861lA0', '1VuMXGiRjb3IDxk61NQJp6h42T9Z0Ahld']
+    file_ids = ['1YzBXfLqRCm5yAs48mgmPIemhlUaV0jNJ', '1WM9kvmlOhzuyepk77R7k0UM2-PAngkQ0', '1J1zoy6uPfCciaQH0WLMhMeC-b3SDV80m', '1PAy6z1PHJMCaAmWGmQXqf25epPAdplgn', '1UP8JwG0v9Nv6nUAYfc4kowbHeJ861lA0', '1VuMXGiRjb3IDxk61NQJp6h42T9Z0Ahld', '1goMTA8ZbDdvdwGIC98LGwxheqTVri5yq']
 
     # Ordre des ids correspondant à l'ordre des noms ci-dessous
-    # file_names = ['clean_dataset.csv', 'best_item_by_cli.csv', 'frequence_item.csv', 'paired_item.csv', 'cli_article_rfm_segment.csv', 'csv_details_by_customer.csv']
+    # file_names = ['clean_dataset.csv', 'best_item_by_cli.csv', 'frequence_item.csv', 'paired_item.csv', 'cli_article_rfm_segment.csv', 'csv_details_by_customer.csv', 'csv_global_metrics.csv']
 
     clean_dataset = pd.DataFrame()
     best_item_by_cli_df = pd.DataFrame()
@@ -22,6 +22,7 @@ class GetFileFromGoogleDrive:
     paired_item_df = pd.DataFrame()
     cli_article_rfm_segment = pd.DataFrame()
     csv_details_by_customer = pd.DataFrame()
+    csv_global_metrics = pd.DataFrame()
 
     def __init__(self):
         for file_id in self.file_ids:
@@ -32,6 +33,8 @@ class GetFileFromGoogleDrive:
             while done is False:
                 status, done = downloader.next_chunk()
                 print('Download file {0}'.format(status.progress() * 100))
+
+            print('Downloading end')
 
             fh.seek(0)
 
@@ -53,7 +56,8 @@ class GetFileFromGoogleDrive:
             elif file_id == '1VuMXGiRjb3IDxk61NQJp6h42T9Z0Ahld':
                 self.csv_details_by_customer = pd.read_csv(fh)
 
-        print('Downloading end')
+            elif file_id == '1goMTA8ZbDdvdwGIC98LGwxheqTVri5yq':
+                self.csv_global_metrics = pd.read_csv(fh)
 
     def get_clean_dataframe(self):
         return self.clean_dataset
@@ -72,3 +76,6 @@ class GetFileFromGoogleDrive:
 
     def get_csv_details_by_customer(self):
         return self.csv_details_by_customer
+
+    def get_csv_global_metrics(self):
+        return self.csv_global_metrics

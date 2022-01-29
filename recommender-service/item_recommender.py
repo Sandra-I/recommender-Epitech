@@ -2,10 +2,8 @@ import pandas as pd
 from itertools import permutations
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np 
-# PROD to uncomment for production
 from google_api.get_file_from_google import GetFileFromGoogleDrive
 class ItemRecommender:
-    # PROD to uncomment for production
     get_file_from_google = GetFileFromGoogleDrive()
     df = pd.DataFrame()
     df_best_item_by_cli = pd.DataFrame()
@@ -19,7 +17,6 @@ class ItemRecommender:
     unpersonnalized_recommended_items = []
 
     def __init__(self):
-        # PROD to uncomment for production
         self.df = self.get_file_from_google.get_clean_dataframe() 
         self.df_best_item_by_cli = self.get_file_from_google.get_best_item_by_cli_dataframe()
         self.pair_counts_df_sorted = self.get_file_from_google.get_paired_item_dataframe()

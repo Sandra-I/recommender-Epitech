@@ -33,3 +33,9 @@ $ npm run serve
 ```
 
 Accéder à l'interface web depuis l'adresse http://localhost:8080/
+
+***
+***
+## Documentation
+
+Pour accèder au wiki du projet suivre ce lien: https://github.com/EpitechMscPro2020/recommender_2022_31/wiki/Protocole-exp%C3%A9rimentale

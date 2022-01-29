@@ -1,6 +1,6 @@
-function generatePieData(labels, dataset) {
+function generatePieData(labels, dataset, type, legend) {
   return {
-    type: "doughnut",
+    type: type,
     data: {
       labels: labels,
       datasets: dataset
@@ -17,7 +17,7 @@ function generatePieData(labels, dataset) {
             const index = tooltipItem['index'];
             const dataset = data['datasets'][0]['data'];
             const value = dataset[index];
-            return `Nombre ventes: ${ numberWithSpaces(value) }`;
+            return `${legend}: ${ numberWithSpaces(value) }`;
           },
         },
       },
@@ -32,7 +32,10 @@ function generatePieData(labels, dataset) {
 }
 
 function numberWithSpaces(x) {
-  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+  if (x > 1000) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+  }
+  return x;
 }
 
 export default generatePieData;

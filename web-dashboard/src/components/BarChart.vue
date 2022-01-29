@@ -29,7 +29,7 @@ export default {
           data: this.data.customers
         },
         {
-          label: "Chiffre d'affaire",
+          label: "Chiffre d'affaires",
           backgroundColor: "#d7ddfd",
           borderColor: "#1f43f4",
           borderWidth: 1,
