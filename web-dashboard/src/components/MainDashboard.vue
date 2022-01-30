@@ -2,7 +2,7 @@
     <div class="main-dashboard">
         <div class="section row justify-content-around" v-if="dataLoaded && globalMetrics">
             <Kpi title="Panier moyen" :value="globalMetrics.basket" sufix="€"/>
-            <Kpi title="Nombre total de client" :value="globalMetrics.totalCustomers"/>
+            <Kpi title="Nombre total de clients" :value="globalMetrics.totalCustomers"/>
             <Kpi title="Chiffre d'affaires total" :value="globalMetrics.totalCa" sufix="€"/>
         </div>
         <div class="section row">
@@ -63,7 +63,7 @@
             <div class="col-12 chart">
                 <div class="card">
                 <div class="card-header">
-                    <h3>Evolution du chiffre d'affaires par rapport au nombre de client</h3>
+                    <h3>Evolution du chiffre d'affaires par rapport au nombre de clients</h3>
                 </div>
                 <div class="card-body">
                     <BarChart :data="saleEvolution"/>

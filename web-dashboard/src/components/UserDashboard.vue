@@ -16,7 +16,7 @@
         <div class="section">
           <div class="row justify-content-between" v-if="customerDetails.average && customerDetails.frequency && customerDetails.recency">
             <Kpi title="Panier moyen" :value="formatPrice(customerDetails.average)"/>
-            <Kpi title="Nombre total d'achat" :value="customerDetails.frequency"/>
+            <Kpi title="Nombre total d'achats" :value="customerDetails.frequency"/>
             <Kpi title="Dernier achat" :value="`Il y a ${customerDetails.recency} mois`"/>
           </div>
           <div class="row justify-content-start" v-if="customerDetails.frequency_group">
